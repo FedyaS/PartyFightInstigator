@@ -48,3 +48,16 @@ def interact(P1: Person, P2: Person, strength=1):
 
     P1.ES.set_emotional_state(joy=new_joy_1, anger=new_anger_1, anxiety=new_anxiety_1, jealousy=new_jealousy_1, curiosity = new_cur_1)
     P2.ES.set_emotional_state(joy=new_joy_2, anger=new_anger_2, anxiety=new_anxiety_2, jealousy=new_jealousy_2, curiosity = new_cur_2)
+
+
+def interact_with_relationship(P1: Person, P2: Person, RM: RelationshipManager, strength=1):
+    p1_thinks_of_p2 = RM.get_relationship(P1, P2)
+    p2_thinks_of_p1 = RM.get_relationship(P2, P1)
+
+    trust_factor = (p1_thinks_of_p2.trust + p2_thinks_of_p1.trust) / 2 / 100
+
+    # Interact Emotional State Simple
+    interact(P1, P2, strength=trust_factor*strength)
+
+    # Spread some rumors
+    

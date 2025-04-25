@@ -9,6 +9,7 @@ class Person:
         self.name = name or random.choice(RANDOM_NAMES)
         self.id = id or create_id()
         self.is_npc = is_npc
+        self.rumor_ids = []
 
         # Emotional State
         self.ES = EmotionalState(randomize_radius=randomize_emotions)
@@ -16,6 +17,7 @@ class Person:
     def pretty_print(self):
         print(f"Person: {self.name} (ID: {self.id})")
         print(f"  NPC: {self.is_npc}")
+        print(f"  Rumors: {self.rumor_ids}")
         print("  Emotional State:")
         print(f"    Joy:       {self.ES.joy}")
         print(f"    Anger:     {self.ES.anger}")

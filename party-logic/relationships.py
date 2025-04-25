@@ -17,7 +17,7 @@ class RelationshipManager:
     def set_relationship(self, p1: Person, p2: Person, trust=50, resentment=0):
         self.relations[self._key(p1.id, p2.id)] = Relationship(trust, resentment)
 
-    def get_relationship(self, p1: Person, p2: Person):
+    def get_relationship(self, p1: Person, p2: Person) -> Relationship:
         return self.relations.get(self._key(p1.id, p2.id), None)
 
     def update_relationship(self, p1: Person, p2: Person, trust=None, resentment=None):
