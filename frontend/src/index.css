@@ -1,68 +1,394 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+/* Import a game-themed font */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
+/* Global styles */
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
+  font-family: 'Arial', sans-serif;
+  padding: 0; /* Added to remove any default padding */
+  background-color: #1a1a1a;
+  color: #ffffff;
   min-height: 100vh;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* Header styles */
+.header {
+  background: linear-gradient(to right, #4b0082, #ff073a);
+  padding: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  width: 100%; /* Ensure header spans full viewport width */
+  margin: 0; /* Remove any default margins */
+  box-sizing: border-box; /* Ensure padding doesn’t affect width */
+  position: sticky; /* Optional: Keeps header fixed at the top */
+  top: 0; /* Aligns header to the top */
+  z-index: 10; /* Ensures header stays above other content */
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2rem;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  animation: pulse 2s infinite;
+}
+
+@media (min-width: 768px) {
+  .header-title {
+    font-size: 2.5rem;
+  }
+}
+
+.header-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 1rem;
+}
+
+.header-nav a {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.header-nav a:hover {
+  color: #ffff33;
+}
+
+/* Page styles */
+.page-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+.page-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+/* Animations */
+@keyframes pulse {
+  0% {
+    text-shadow: 0 0 5px #ffffff;
+  }
+  50% {
+    text-shadow: 0 0 20px #ff073a, 0 0 30px #4b0082;
+  }
+  100% {
+    text-shadow: 0 0 5px #ffffff;
+  }
+}
+
+
+/* Global styles */
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
   background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  color: #ffffff;
+  min-height: 100vh;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
+/* Header styles */
+.header {
+  background: linear-gradient(to right, #4b0082, #ff073a);
+  padding: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2rem;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  animation: pulse 2s infinite;
+}
+
+@media (min-width: 768px) {
+  .header-title {
+    font-size: 2.5rem;
   }
 }
+
+.header-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 1rem;
+}
+
+.header-nav a {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.header-nav a:hover {
+  color: #ffff33;
+}
+
+/* Page styles */
+.page-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+.page-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+/* Layout styles */
+.layout-container {
+  width: 80%;
+  height: 80vh; /* Takes ~80% of viewport height */  
+  margin: 0 auto; /* Changed from '2rem auto' to '0 auto' to remove top/bottom margin */
+  background: rgba(0, 0, 0, 0.7);
+  border: 2px solid #00b7eb;
+  box-shadow: 0 0 10px #00b7eb;
+  display: flex;
+  flex-direction: column;
+  min-height: 400px; /* Ensures usability on small screens */
+  padding: 0.5rem
+}
+
+.status-bar {
+  height: 25%; /* ~20% of layout height */
+  background: linear-gradient(to right, #191970, #8a2be2);
+  padding: 1rem;
+  border-bottom: 1px solid #00b7eb;
+}
+
+.status-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.25rem;
+  color: #ffffff;
+  margin: 0 0.5rem 0.5rem 0.5rem;
+  text-align: center;
+}
+
+.layout-main {
+  display: flex;
+  flex: 1; /* Takes remaining height after status bar */
+  overflow: hidden; /* Prevents overflow issues */
+}
+
+.sidebar {
+  width: 30%; /* ~30% of layout width */
+  background: rgba(0, 0, 0, 0.8);
+  padding: 1rem;
+  border-right: 1px solid #00b7eb;
+  overflow-y: auto; /* Allows scrolling if content overflows */
+}
+
+.sidebar-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.1rem;
+  color: #ffff33;
+  margin: 0 0 1rem;
+}
+
+.content-area {
+  flex: 1; /* Takes remaining middle space */
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.svg-placeholder {
+  border: 1px dashed #00b7eb;
+  padding: 1rem;
+  color: #ffffff;
+  text-align: center;
+}
+
+.graph-section {
+  width: 30%; /* ~30% of layout width */
+  background: rgba(0, 0, 0, 0.8);
+  padding: 1rem;
+  border-left: 1px solid #00b7eb;
+  overflow-y: auto; /* Allows scrolling if content overflows */
+}
+
+.graph-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.1rem;
+  color: #ffff33;
+  margin: 0 0 1rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .layout-container {
+    width: 95%;
+    height: auto; /* Allow natural height on mobile */
+    min-height: 600px; /* Ensure enough vertical space */
+  }
+
+  .layout-main {
+    flex-direction: column;
+  }
+
+  .sidebar,
+  .graph-section {
+    width: 100%;
+    border: none;
+    border-top: 1px solid #00b7eb;
+  }
+
+  .status-bar {
+    height: 100px; /* Fixed height for mobile */
+  }
+}
+
+/* Game page background */
+.game-page {
+  min-height: 100vh;
+  background-image: url('/partyBG1.jpg');
+  background-size: 100% auto;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* Overlay with blur effect */
+.game-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px); /* Adds a frosted glass effect */
+  z-index: 1;
+}
+
+.game-page > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* GameStats styles */
+.game-stats {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center vertically within parent */
+  align-items: center; /* Center horizontally within parent */
+  gap: 1rem;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columns */
+  grid-template-rows: repeat(2, 60px); /* 2 rows with fixed height */
+  gap: 1rem 0.5rem; /* Vertical gap 1rem, horizontal gap 0.5rem */
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center content horizontally */
+  background: rgba(0, 20, 20, 0.7); /* Make boxes transparent */
+  padding: 0.5rem;
+  border: 1px solid #00b7eb;
+  border-radius: 10px;
+  height: 60px; /* Fixed height for all boxes */
+  box-sizing: border-box; /* Include padding and border in width/height */
+  transition: box-shadow 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.stat-item:hover {
+  box-shadow: 0 0 15px #00b7eb; /* Glow effect on hover */
+}
+
+.stat-icon {
+  width: 30px;
+  height: 30px;
+  margin-right: 0.5rem;
+}
+
+.svg-placeholder-small {
+  width: 100%;
+  height: 100%;
+  background: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  color: #00b7eb;
+  text-align: center;
+  border: 1px dashed #00b7eb;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center content vertically */
+}
+
+.stat-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.6rem; /* Smaller label */
+  color: #ffff33;
+  opacity: 0.7; /* Less prominent */
+  text-transform: uppercase;
+  order: 1; /* Moves label below value */
+}
+
+.stat-value {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.2rem; /* Increased to fill more of the box */
+  color: #ffffff;
+  text-shadow: 0 0 5px #39ff14, 0 0 10px #39ff14; /* Neon glow effect */
+  order: 0; /* Value above label */
+}
+
+.time-display {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.5rem; /* Matches stat-value size */
+  color: #00b7eb; /* Neon blue */
+  background: rgba(0, 20, 20, 0.6); /* Match other stat-items */
+  border: 1px solid #00b7eb;; /* Remove border since stat-item already has it */
+  box-shadow: none; /* Remove shadow since stat-item handles it */
+  text-align: center;
+  line-height: 1; /* Prevent extra vertical space */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%; /* Ensure it fits within the grid column */
+  height: 100%; /* Ensure it fits within the fixed height */
+}
+
