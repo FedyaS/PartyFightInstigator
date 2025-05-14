@@ -2,10 +2,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
 
 /* Global styles */
-body {
+html,
+body,
+#root {
+  height: 100%;
   margin: 0;
+  padding: 0;
+  overflow: hidden; /* Prevent scrolling on html and body */
   font-family: 'Arial', sans-serif;
-  padding: 0; /* Added to remove any default padding */
   background-color: #1a1a1a;
   color: #ffffff;
   min-height: 100vh;

@@ -1,4 +1,5 @@
 import GameStats from './GameStats';
+import './GameLayout.css';
 
 function GameLayout({ children }) {
   return (
