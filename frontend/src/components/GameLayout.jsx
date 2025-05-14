@@ -1,11 +1,11 @@
 import GameStats from './GameStats';
+import CharacterAnimation from './CharacterAnimation';
 
 function GameLayout({ children }) {
   return (
     <div className="layout-container">
       <div className="status-bar">
-        {/* <h2 className="status-title">Status</h2> */}
-        <GameStats /> {/* Added GameStats component */}
+        <GameStats />
       </div>
       <div className="layout-main">
         <aside className="sidebar">
@@ -14,7 +14,9 @@ function GameLayout({ children }) {
         </aside>
         <main className="content-area">
           {children}
-          <div className="svg-placeholder">SVG or Game Content Here</div>
+          <div className="svg-placeholder">
+            <CharacterAnimation dialogue="Hello, party crasher!" />
+          </div>
         </main>
         <aside className="graph-section">
           <h3 className="graph-title">Graph</h3>
@@ -24,4 +26,5 @@ function GameLayout({ children }) {
     </div>
   );
 }
-  export default GameLayout;
+
+export default GameLayout;

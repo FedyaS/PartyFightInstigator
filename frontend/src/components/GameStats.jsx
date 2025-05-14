@@ -4,7 +4,7 @@ function GameStats() {
   const gameState = {
     level_name: "1",
     user_name: "PartyCrasher17",
-    time_started: "2025-04-25T05:44:55Z",
+    time_started: "2025-04-26T00:14:22Z",
     chaos_meter: 67,
     party_headcount: 13,
     personal_risk: 50,
