@@ -20,16 +20,31 @@ const MainStats = () => {
       <div className="stats-container">
         <h2>Player Stats</h2>
         <div className="stat-item">
-          <span className="stat-label">Username:</span>
-          <span className="stat-value">{userStats.username}</span>
+          <div className="stat-icon">
+            <img src="/icons/user-icon.svg" alt="User Icon" width="30" height="30" />
+          </div>
+          <div className="stat-info">
+            <span className="stat-value">{userStats.username}</span>
+            <span className="stat-label">Username</span>
+          </div>
         </div>
         <div className="stat-item">
-          <span className="stat-label">Levels Passed:</span>
-          <span className="stat-value">{userStats.levelsPassed}</span>
+          <div className="stat-icon">
+            <img src="/icons/level-icon.svg" alt="Level Icon" width="30" height="30" />
+          </div>
+          <div className="stat-info">
+            <span className="stat-value">{userStats.levelsPassed}</span>
+            <span className="stat-label">Levels Passed</span>
+          </div>
         </div>
         <div className="stat-item">
-          <span className="stat-label">Time Played:</span>
-          <span className="stat-value">{userStats.timePlayed}</span>
+          <div className="stat-icon">
+            <img src="/icons/time-icon.svg" alt="Time Icon" width="30" height="30" />
+          </div>
+          <div className="stat-info">
+            <span className="stat-value">{userStats.timePlayed}</span>
+            <span className="stat-label">Time Played</span>
+          </div>
         </div>
         <button 
           className="start-button"

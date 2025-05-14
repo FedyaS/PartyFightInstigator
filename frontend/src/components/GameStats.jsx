@@ -98,8 +98,13 @@ function GameStats() {
             <span className="stat-label">Active Rumors</span>
           </div>
         </div>
-        <div className="stat-item time-display">
-          {minutes}:{seconds}
+        <div className="stat-item">
+          <div className="stat-icon">
+            <img src="/icons/time-icon.svg" alt="Time Icon" width="30" height="30" />
+          </div>
+          <div className="stat-info">
+            <span className="stat-value">{minutes}:{seconds}</span>
+          </div>
         </div>
       </div>
     </div>

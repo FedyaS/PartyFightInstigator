@@ -18,7 +18,7 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   width: 100%; /* Ensure header spans full viewport width */
   margin: 0; /* Remove any default margins */
-  box-sizing: border-box; /* Ensure padding doesn’t affect width */
+  box-sizing: border-box; /* Ensure padding doesn't affect width */
   position: sticky; /* Optional: Keeps header fixed at the top */
   top: 0; /* Aligns header to the top */
   z-index: 10; /* Ensures header stays above other content */
@@ -248,7 +248,7 @@ body {
 .stat-item {
   display: flex;
   align-items: center;
-  justify-content: center; /* Center content horizontally */
+  justify-content: flex-start; /* Changed from center to flex-start */
   background: rgba(0, 20, 20, 0.7); /* Make boxes transparent */
   padding: 0.5rem;
   border: 1px solid #00b7eb;
@@ -290,6 +290,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center; /* Center content vertically */
+  flex-grow: 1; /* Added to allow text block to fill remaining space */
 }
 
 .stat-label {
