@@ -1,0 +1,75 @@
+.main-stats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  padding: 20px;
+}
+
+.stats-container {
+  background: rgba(0, 0, 0, 0.7);
+  border: 2px solid #00b7eb;
+  box-shadow: 0 0 10px #00b7eb;
+  border-radius: 10px;
+  padding: 30px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.stats-container h2 {
+  text-align: center;
+  color: #ffffff;
+  margin-bottom: 20px;
+  font-family: 'Orbitron', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  padding: 10px;
+  background: rgba(0, 20, 20, 0.7);
+  border: 1px solid #00b7eb;
+  border-radius: 5px;
+  transition: box-shadow 0.3s ease;
+}
+
+.stat-item:hover {
+  box-shadow: 0 0 15px #00b7eb;
+}
+
+.stat-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.8rem;
+  color: #39ff14;
+  opacity: 0.7;
+  text-transform: uppercase;
+}
+
+.stat-value {
+  font-family: 'Orbitron', sans-serif;
+  color: #00b7eb;
+}
+
+.start-button {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(to right, #4b0082, #ff073a);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-family: 'Orbitron', sans-serif;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.start-button:hover {
+  box-shadow: 0 0 15px #ff073a;
+  transform: translateY(-2px);
+} 
