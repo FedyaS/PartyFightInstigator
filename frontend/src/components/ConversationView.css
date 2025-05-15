@@ -1,0 +1,189 @@
+/* ConversationView.css */
+.conversation-view-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(10, 10, 20, 0.85); /* Darker, slightly transparent background */
+  border: 1px solid #00b7eb; /* Neon blue border, consistent with index.css */
+  border-radius: 8px; /* Slightly rounded corners */
+  padding: 1rem;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+  color: #e0e0e0; /* Light grey text for readability */
+}
+
+.npc-area {
+  display: flex;
+  align-items: flex-start; /* Align items to the start of the flex container */
+  margin-bottom: 1.5rem;
+  padding: 0.5rem;
+  border-bottom: 1px dashed #007a99; /* Subtler separator */
+}
+
+.npc-image {
+  width: 100px; /* Adjust size as needed */
+  height: 100px;
+  border-radius: 50%; /* Circular image */
+  border: 2px solid #00b7eb;
+  margin-right: 1.5rem;
+  object-fit: cover;
+}
+
+.speech-bubble {
+  padding: 0.8rem 1.2rem;
+  border-radius: 15px;
+  max-width: 70%;
+  background-color: rgba(0, 50, 70, 0.9); /* Dark cyan, slightly transparent */
+  border: 1px solid #00b7eb;
+  box-shadow: 0 2px 5px rgba(0, 183, 235, 0.3);
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.npc-speech-bubble {
+  border-top-left-radius: 0; /* "Tail" effect */
+  position: relative; /* For loading dots positioning if needed */
+}
+
+.chat-log {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem; /* Space between messages */
+  margin-bottom: 1rem;
+}
+
+.player-speech-bubble {
+  align-self: flex-end;
+  background-color: rgba(30, 70, 90, 0.9); /* Slightly different blue for player */
+  border: 1px solid #39ff14; /* Neon green border for player */
+  color: #f0f0f0;
+  border-top-right-radius: 0; /* "Tail" effect on the other side */
+  box-shadow: 0 2px 5px rgba(57, 255, 20, 0.3);
+}
+
+.input-area {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  border-top: 1px solid #007a99;
+  background-color: rgba(0, 20, 30, 0.9); /* Darker area for input */
+  border-radius: 0 0 6px 6px; /* Match container rounding at bottom */
+}
+
+.input-wrapper {
+  flex-grow: 1;
+  position: relative;
+  margin-right: 0.75rem;
+}
+
+.chat-input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid #00b7eb;
+  border-radius: 20px; /* Rounded shape */
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  font-size: 1rem;
+  font-family: 'Orbitron', sans-serif; /* Futuristic font */
+  transition: all 0.3s ease;
+}
+
+.chat-input:focus {
+  outline: none;
+  border-color: #39ff14; /* Neon green focus */
+  box-shadow: 0 0 10px #39ff14;
+  font-size: 1.1rem; /* Text appears larger on focus, as per plan */
+}
+
+.chat-input::placeholder {
+  color: #888;
+}
+
+.input-wrapper.locked .chat-input {
+  background-color: rgba(50, 50, 50, 0.5);
+  border-color: #555;
+  color: #999;
+}
+
+.lock-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  filter: invert(70%) sepia(100%) saturate(500%) hue-rotate(180deg) brightness(100%) contrast(90%); /* Makes it cyan-ish */
+}
+
+.send-button {
+  background-color: transparent;
+  border: 2px solid #00b7eb;
+  border-radius: 50%; /* Circular button */
+  padding: 0.6rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.send-button img {
+  width: 24px; /* Adjust icon size */
+  height: 24px;
+  filter: brightness(0) invert(1); /* Make SVG white to stand out */
+}
+
+.send-button:hover:not(:disabled) {
+  background-color: #00b7eb;
+  box-shadow: 0 0 15px #00b7eb;
+}
+
+.send-button:disabled {
+  border-color: #555;
+  cursor: not-allowed;
+}
+
+.send-button:disabled img {
+  filter: brightness(0) invert(0.5);
+}
+
+/* Loading dots animation */
+.loading-dots span {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #00b7eb;
+  margin: 0 2px;
+  animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.loading-dots span:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.loading-dots span:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes bounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1.0);
+  }
+}
+
+/* Styling for Orbitron font usage as in index.css for titles, if needed later */
+/* .conversation-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.5rem;
+  color: #ffff33; 
+  text-align: center;
+  margin-bottom: 1rem;
+} */ 

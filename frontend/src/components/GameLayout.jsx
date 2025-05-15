@@ -1,4 +1,5 @@
 import GameStats from './GameStats';
+import ConversationView from './ConversationView';
 import './GameLayout.css';
 
 function GameLayout({ children }) {
@@ -9,13 +10,8 @@ function GameLayout({ children }) {
         <GameStats /> {/* Added GameStats component */}
       </div>
       <div className="layout-main">
-        <aside className="sidebar">
-          <h3 className="sidebar-title">Chats / NPC Info</h3>
-          <p>Chat messages or NPC details will appear here</p>
-        </aside>
         <main className="content-area">
-          {children}
-          <div className="svg-placeholder">SVG or Game Content Here</div>
+          <ConversationView /> {/* Added ConversationView component */}
         </main>
         <aside className="graph-section">
           <h3 className="graph-title">Graph</h3>
@@ -25,4 +21,4 @@ function GameLayout({ children }) {
     </div>
   );
 }
-  export default GameLayout;
+export default GameLayout;
