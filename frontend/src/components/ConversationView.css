@@ -78,10 +78,12 @@
   flex-grow: 1;
   position: relative;
   margin-right: 0.75rem;
+  display: flex;
+  align-items: center;
 }
 
 .chat-input {
-  width: 100%;
+  width: calc(100% - 30px);
   padding: 0.8rem 1rem;
   border: 1px solid #00b7eb;
   border-radius: 20px; /* Rounded shape */
@@ -111,9 +113,9 @@
 
 .lock-icon {
   position: absolute;
-  right: 10px;
+  left: 50%;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translate(-50%, -50%);
   width: 24px;
   height: 24px;
   filter: invert(70%) sepia(100%) saturate(500%) hue-rotate(180deg) brightness(100%) contrast(90%); /* Makes it cyan-ish */
