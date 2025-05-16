@@ -15,19 +15,31 @@
 
 .npc-area {
   display: flex;
-  align-items: flex-start; /* Align items to the start of the flex container */
-  margin-bottom: 1.5rem;
-  padding: 0.5rem;
-  border-bottom: 1px dashed #007a99; /* Subtler separator */
+  justify-content: space-between; /* Pushes left and right sections apart */
+  align-items: flex-start; 
+  margin-bottom: 20px;
+  padding: 15px;
+  /* background-color: #3c3c3c; REMOVED - User request to not make entire div grey */
+  border-radius: 10px;
+  position: relative; /* For potential absolute positioning inside */
+}
+
+/* Left Section: NPC Image and Speech Bubble */
+.npc-info-left {
+  display: flex;
+  align-items: flex-start; /* Image and bubble align at their top */
+  gap: 15px; /* Space between image and bubble */
+  flex-grow: 1; /* Allow left side to take necessary space */
+  margin-right: 20px; /* Space between left and right sections */
 }
 
 .npc-image {
-  width: 100px; /* Adjust size as needed */
-  height: 100px;
-  border-radius: 50%; /* Circular image */
-  border: 2px solid #00b7eb;
-  margin-right: 1.5rem;
+  width: 100px; 
+  height: 100px; 
+  border-radius: 50%;
   object-fit: cover;
+  /* margin-right: 20px; /* Removed as gap is used in npc-info-left */
+  border: 3px solid #4a4a4a;
 }
 
 .speech-bubble {
@@ -42,8 +54,10 @@
 }
 
 .npc-speech-bubble {
-  border-top-left-radius: 0; /* "Tail" effect */
-  position: relative; /* For loading dots positioning if needed */
+  /* margin-right: 20px; /* Removed as it's part of npc-info-left spacing */
+  /* flex-grow: 1; /* Speech bubble can grow within its container if needed, but npc-info-left handles overall growth */
+  max-width: 350px; /* Adjust if needed, can be more specific */
+  /* Keep existing speech bubble styles */
 }
 
 .chat-log {
@@ -188,4 +202,151 @@
   color: #ffff33; 
   text-align: center;
   margin-bottom: 1rem;
-} */ 
+} */
+
+/* Styles for NPC Interaction Elements Wrapper */
+.npc-interaction-elements {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Or center, depending on desired alignment of bubble/bar */
+  margin-left: 15px; /* Space between NPC image and this column */
+  flex-grow: 1;
+}
+
+/* Emotion Bar Section */
+.emotion-section {
+  width: 100%; /* Ensure it takes width of its container in npc-indicators-right */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* margin-top: 10px; /* Spacing now handled by gap in npc-indicators-right */
+  align-items: center; /* Center the bar and icons tray */
+}
+
+.emotion-bar {
+  width: 100%; /* Let it take full width of its parent (.npc-indicators-right) */
+  max-width: 350px; /* Increased max-width further */
+  height: 14px; /* Slightly thicker bar */
+  background: linear-gradient(to right, #4CAF50, #FFEB3B, #F44336); /* Green, Yellow, Red */
+  border-radius: 6px; /* Rounded corners for the bar */
+  position: relative; /* For positioning the indicator */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.emotion-indicator {
+  width: 12px; /* Diameter of the circle */
+  height: 12px; /* Diameter of the circle */
+  background-color: white; /* Color of the circle */
+  border: 2px solid #333; /* Border for the circle to make it pop */
+  border-radius: 50%; /* Makes it a circle */
+  position: absolute; /* Positioned relative to .emotion-bar */
+  top: 50%; /* Center vertically */
+  transform: translateY(-50%); /* Adjust for exact vertical centering */
+  transition: left 0.3s ease-in-out; /* Smooth transition for movement */
+  box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
+
+.emotion-icons-tray {
+  display: flex;
+  justify-content: space-between; /* Distribute icons evenly */
+  width: calc(80% + 30px); /* Slightly wider than the bar to align icons with ends */
+  max-width: calc(250px + 30px);
+  margin-top: 8px; /* Space between the bar and the icons */
+}
+
+.emotion-icon {
+  width: 24px; /* Size of the emotion face icons */
+  height: 24px; /* Size of the emotion face icons */
+}
+
+/* Specific colors for icons using CSS filters. Assumes SVGs are monochrome. */
+.happy-icon-color {
+  /* Greenish tint */
+  filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg) brightness(118%) contrast(119%);
+}
+
+.neutral-icon-color {
+  /* Yellowish tint */
+  filter: invert(80%) sepia(50%) saturate(3000%) hue-rotate(350deg) brightness(100%) contrast(100%);
+}
+
+.angry-icon-color {
+  /* Reddish tint */
+  filter: invert(30%) sepia(90%) saturate(6000%) hue-rotate(350deg) brightness(90%) contrast(120%);
+}
+
+/* Adjustments might be needed if original CSS relied on direct flex child status in npc-area */
+.speech-bubble.npc-speech-bubble {
+  /* Adjustments might be needed if original CSS relied on direct flex child status in npc-area */
+  max-width: 300px; /* Or as per original styling */
+  /* Other existing styles for npc-speech-bubble */
+}
+
+/* New wrapper for vertical stacking of dialogue/trust row and emotion bar */
+.npc-interaction-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Allows this wrapper to take remaining space */
+}
+
+/* New wrapper for the speech bubble and trust meter to sit side-by-side */
+.npc-dialogue-and-trust-row {
+  display: flex;
+  align-items: flex-start; /* Align bubble and meter to the top of their row */
+  width: 100%;
+  margin-bottom: 15px; /* Space between this row and the emotion bar */
+}
+
+/* Trust Meter Styles */
+.trust-meter-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%; 
+}
+
+.trust-dial-container {
+  position: relative; 
+  width: 120px; /* Increased size (80px * 1.5) */
+  height: 120px; /* Increased size (80px * 1.5) */
+  margin-bottom: 2px; /* Closer to the label */
+}
+
+.trust-dial-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.trust-arrow-svg {
+  position: absolute;
+  width: 40%; /* Smaller pointer */
+  height: 40%; /* Smaller pointer */
+  top: 30%; /* (100% - 40%) / 2 = 30% to center */
+  left: 30%; /* (100% - 40%) / 2 = 30% to center */
+  transform-origin: center center; 
+  transition: transform 0.5s ease-in-out;
+}
+
+.trust-label {
+  font-size: 0.9em; /* Slightly larger label */
+  color: #b0b0b0; 
+  font-weight: bold;
+  text-transform: uppercase;
+  font-family: 'Orbitron', sans-serif; /* Futuristic font */
+}
+
+/* Right Section: Trust Meter and Emotion Bar */
+.npc-indicators-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center items horizontally */
+  justify-content: flex-start; /* Align items to the top of the container */
+  gap: 25px; /* Adjusted space between trust meter and emotion bar */
+  min-width: 200px; 
+  padding-top: 0; /* Remove padding, rely on flex alignment */
+  align-self: flex-start; /* Align this whole block to the start of its parent flex container if possible */
+  height: 100%; /* Allow it to use parent height for alignment */
+} 
