@@ -15,7 +15,7 @@ function ConversationView() {
   const P_YELLOW = { inv: 80, sep: 50, sat: 3000, hue: 350, bri: 100, con: 100 };
   const P_GREEN =  { inv: 48, sep: 79, sat: 2476, hue: 86,  bri: 118, con: 119 };
 
-  const interpolateValues = (v1, v2, factor) => v1 * (1 - factor) + v2 * factor;
+  const interpolateValues = (v1, v2, factor) => v1 * (1 - factor) + v2 * factor;  
 
   useEffect(() => {
     const calculateFilter = () => {
