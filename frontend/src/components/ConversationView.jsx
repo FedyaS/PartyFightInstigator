@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import './ConversationView.css';
 import Dial from './Dial.jsx'; // Explicitly use .jsx and correct casing
+import EmotionBar from './EmotionBar.jsx';
 
 function ConversationView() {
   const [npcMessage, setNpcMessage] = useState({ text: 'Hello! I am the CEO. Ask me anything.', isLoading: false });
   const [playerMessage, setPlayerMessage] = useState(null); // Stores the last player message
   const [playerInputText, setPlayerInputText] = useState('');
   const [isPlayerInputLocked, setIsPlayerInputLocked] = useState(false);
-  const [angerLevel, setAngerLevel] = useState(100); // Emotion state: 1 (happy) to 100 (angry)
+  const [angerLevel, setAngerLevel] = useState(57); // Emotion state: 1 (happy) to 100 (angry)
   const [trustLevel, setTrustLevel] = useState(25); // Trust state: 0 (low) to 100 (high)
 
   const handleSendMessage = () => {
@@ -29,10 +30,6 @@ function ConversationView() {
       setTrustLevel(prev => Math.max(0, prev - 5));
     }, 2000);
   };
-
-  // Calculate position for the emotion indicator (1-100 range)
-  // If angerLevel is 1, pos is 0%. If angerLevel is 100, pos is 100%.
-  const indicatorPositionPercent = angerLevel === 1 ? 0 : (angerLevel - 1) / 99 * 100;
 
   return (
     <div className="conversation-view-container">
@@ -62,17 +59,7 @@ function ConversationView() {
           </div>
 
           {/* Emotion Bar Section */}
-          <div className="emotion-section">
-            <div className="anger-label">ANGER</div>
-            <div className="emotion-bar">
-              <div className="emotion-indicator" style={{ left: `calc(${angerLevel}% - 8px)` }}></div>
-            </div>
-            <div className="emotion-icons-tray">
-              <img src="/icons/happy-face.svg" alt="Happy" className="emotion-icon happy-icon-color" />
-              <img src="/icons/neutral-face.svg" alt="Neutral" className="emotion-icon neutral-icon-color" />
-              <img src="/icons/angry-face.svg" alt="Angry" className="emotion-icon angry-icon-color" />
-            </div>
-          </div>
+          <EmotionBar angerLevel={angerLevel} />
         </div>
       </div>
 
