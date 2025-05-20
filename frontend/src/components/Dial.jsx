@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 function mapValueToAngle(value) {
     // Ensure value is within 0-100 range, as trustLevel is.
@@ -19,9 +19,50 @@ function mapValueToAngle(value) {
     return 0; // Default return if something unexpected happens
 }
 
-function Dial({ value, svgFilter }) {
+function Dial({ trustLevel }) {
   const dialAssetUrl = '/icons/dial.svg';
   const pointerAssetUrl = '/icons/dial-pointer.svg';
+
+  const [svgFilter, setSvgFilter] = useState('');
+  const P_RED =   { inv: 30, sep: 90, sat: 6000, hue: 350, bri: 90, con: 120 };
+  const P_YELLOW = { inv: 80, sep: 50, sat: 3000, hue: 350, bri: 100, con: 100 };
+  const P_GREEN =  { inv: 48, sep: 79, sat: 2476, hue: 86,  bri: 118, con: 119 };
+
+  const interpolateValues = (v1, v2, factor) => v1 * (1 - factor) + v2 * factor;  
+
+  useEffect(() => {
+    const calculateFilter = () => {
+      let currentTrust = trustLevel;
+      if (currentTrust < 0) currentTrust = 0;
+      if (currentTrust > 100) currentTrust = 100;
+
+      let params;
+      if (currentTrust < 50) {
+        const factor = currentTrust / 50;
+        params = {
+          inv: interpolateValues(P_RED.inv, P_YELLOW.inv, factor),
+          sep: interpolateValues(P_RED.sep, P_YELLOW.sep, factor),
+          sat: interpolateValues(P_RED.sat, P_YELLOW.sat, factor),
+          hue: interpolateValues(P_RED.hue, P_YELLOW.hue, factor),
+          bri: interpolateValues(P_RED.bri, P_YELLOW.bri, factor),
+          con: interpolateValues(P_RED.con, P_YELLOW.con, factor),
+        };
+      } else {
+        const factor = (currentTrust - 50) / 50;
+        params = {
+          inv: interpolateValues(P_YELLOW.inv, P_GREEN.inv, factor),
+          sep: interpolateValues(P_YELLOW.sep, P_GREEN.sep, factor),
+          sat: interpolateValues(P_YELLOW.sat, P_GREEN.sat, factor),
+          hue: interpolateValues(P_YELLOW.hue, P_GREEN.hue, factor),
+          bri: interpolateValues(P_YELLOW.bri, P_GREEN.bri, factor),
+          con: interpolateValues(P_YELLOW.con, P_GREEN.con, factor),
+        };
+      }
+      return `invert(${Math.round(params.inv)}%) sepia(${Math.round(params.sep)}%) saturate(${Math.round(params.sat)}%) hue-rotate(${Math.round(params.hue)}deg) brightness(${Math.round(params.bri)}%) contrast(${Math.round(params.con)}%)`;
+    };
+    setSvgFilter(calculateFilter());
+  }, [trustLevel, P_RED, P_YELLOW, P_GREEN]); // Added dependencies
+
 
   // Overall container size
   const containerWidth = 185;
@@ -58,7 +99,7 @@ function Dial({ value, svgFilter }) {
   const pointerSvgLeft = dialCenterX - pivotX_in_pointerSvg;
   const pointerSvgTop = dialCenterY - pivotY_in_pointerSvg;
 
-  const angle = mapValueToAngle(value);
+  const angle = mapValueToAngle(trustLevel);
   // The original Dial.jsx used `rotate(${-angle}deg)`.
   const rotationTransform = `rotate(${-angle}deg)`;
 
