@@ -27,8 +27,10 @@
 }
 
 .content-area {
+  display: flex;
+  flex-direction: column;
   flex: 1;
-  padding: 1rem;
+  /* padding: 1rem; */
   overflow-y: auto;
   overflow-x: hidden;
 }

@@ -18,7 +18,7 @@ body,
 /* Header styles */
 .header {
   background: linear-gradient(to right, #4b0082, #ff073a);
-  padding: 1rem;
+  padding: 0.75rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   width: 100%; /* Ensure header spans full viewport width */
   margin: 0; /* Remove any default margins */
@@ -38,16 +38,17 @@ body,
 
 .header-title {
   font-family: 'Orbitron', sans-serif;
-  font-size: 2rem;
+  font-size: 1.75rem;
   color: #ffffff;
   text-transform: uppercase;
   letter-spacing: 2px;
   animation: pulse 2s infinite;
+  margin: 0;
 }
 
 @media (min-width: 768px) {
   .header-title {
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
 }
 
@@ -111,9 +112,9 @@ body,
 }
 
 .status-bar {
-  height: 25%; /* ~20% of layout height */
+  height: 20%; /* ~20% of layout height */
   background: linear-gradient(to right, #191970, #8a2be2);
-  padding: 1rem;
+  padding: 0; /* Changed from 0.5rem to 0 */
   border-bottom: 1px solid #00b7eb;
 }
 
@@ -235,7 +236,7 @@ body,
   flex-direction: column;
   justify-content: center; /* Center vertically within parent */
   align-items: center; /* Center horizontally within parent */
-  gap: 1rem;
+  gap: 0; /* Changed from 1rem */
   width: 100%;
   height: 100%;
   overflow-y: auto;
@@ -245,8 +246,10 @@ body,
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr); /* 4 columns */
-  grid-template-rows: repeat(2, 60px); /* 2 rows with fixed height */
-  gap: 1rem 0.5rem; /* Vertical gap 1rem, horizontal gap 0.5rem */
+  grid-template-rows: repeat(2, 1fr);
+  gap: 0; /* Vertical and horizontal gap set to 0 */
+  width: 100%; /* Added to fill parent */
+  height: 100%; /* Added to fill parent */
 }
 
 .stat-item {
@@ -256,14 +259,15 @@ body,
   background: rgba(0, 20, 20, 0.7); /* Make boxes transparent */
   padding: 0.5rem;
   border: 1px solid #00b7eb;
-  border-radius: 10px;
-  height: 60px; /* Fixed height for all boxes */
+  border-radius: 0; /* Changed from 10px to 0 for flush boxes */
+  height: 100%;
+  /* height: 60px; Removed, now controlled by grid-template-rows */
   box-sizing: border-box; /* Include padding and border in width/height */
   transition: box-shadow 0.3s ease; /* Smooth transition for hover effect */
 }
 
 .stat-item:hover {
-  box-shadow: 0 0 15px #00b7eb; /* Glow effect on hover */
+  box-shadow: 15px 15px 15px 15px #00b7eb; /* Glow effect on hover */
 }
 
 .stat-icon {
