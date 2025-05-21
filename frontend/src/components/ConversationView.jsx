@@ -2,12 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import './ConversationView.css';
 import Dial from './Dial.jsx';
 import EmotionBar from './EmotionBar.jsx';
+import VoiceDotCone from './VoiceDotCone.jsx';
 
 function ConversationView() {
   const inputRef = useRef(null);
   const [npcMessage, setNpcMessage] = useState({ text: 'Hello! I am the CEO. Ask me anything.', isLoading: false });
   const [playerMessage, setPlayerMessage] = useState(null);
   const [playerInputText, setPlayerInputText] = useState('');
+  const [animationDirection, setAnimationDirection] = useState('none')
   const [isPlayerInputLocked, setIsPlayerInputLocked] = useState(false);
   const [angerLevel, setAngerLevel] = useState(57);
   const [trustLevel, setTrustLevel] = useState(25);
@@ -28,11 +30,13 @@ function ConversationView() {
     setPlayerMessage(newPlayerMessage);
     setPlayerInputText('');
     setIsPlayerInputLocked(true);
+    setAnimationDirection('up')
 
     setNpcMessage(prev => ({ ...prev, isLoading: true }));
     setTimeout(() => {
       setNpcMessage({ text: `I received your message: "${newPlayerMessage.text}". That's interesting!`, isLoading: false });
       setIsPlayerInputLocked(false);
+      setAnimationDirection('down')
       setAngerLevel(prev => Math.min(100, prev + 10));
       setTrustLevel(prev => Math.max(0, prev - 5));
     }, 2000);
@@ -57,13 +61,17 @@ function ConversationView() {
             </div>
           </div>
 
-          {/* Bottom: Chat Log */}
-          <div className="chat-log">
-            {playerMessage && (
-              <div className={`speech-bubble player-speech-bubble`}>
-                {playerMessage.text}
-              </div>
-            )}
+          <div className="dot-pattern-container">
+            {/* <DotPattern size={150} animationDirection="down" /> */}
+            <VoiceDotCone size={150} animationDirection={animationDirection} animationCycles={1} color='rgba(0, 50, 70, 0.9)'/>
+          </div>
+
+          {/* Bottom: Player Image and Message */}
+          <div className="player-info-bottom">
+            <div className={`speech-bubble player-speech-bubble`}>
+              {playerMessage?.text}
+            </div>
+            <img src="/assets/elon.png" alt="Player" className="player-image" />
           </div>
         </div>
 

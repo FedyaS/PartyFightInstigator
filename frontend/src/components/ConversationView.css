@@ -34,8 +34,8 @@
 /* Top: NPC Image and Message */
 .npc-info-top {
   display: flex;
-  align-items: flex-start;
-  gap: 15px;
+  align-items: flex-start; /* Align items to the start for speech bubble */
+  margin-bottom: 10px;
 }
 
 .npc-image {
@@ -58,10 +58,10 @@
 }
 
 .npc-speech-bubble {
-  /* margin-right: 20px; /* Removed as it's part of npc-info-left spacing */
-  /* flex-grow: 1; /* Speech bubble can grow within its container if needed, but npc-info-left handles overall growth */
-  max-width: 350px; /* Adjust if needed, can be more specific */
-  /* Keep existing speech bubble styles */
+  position: relative;
+  top: 50px; /* Half of the image height (100px) to align with center */
+  max-width: 350px;
+  border-top-left-radius: 0;
 }
 
 /* Chat Log */
@@ -79,11 +79,13 @@
 }
 
 .player-speech-bubble {
+  position: relative;
+  bottom: 50px; /* Half of the image height (100px) to align with center */
   align-self: flex-end;
-  background-color: rgba(30, 70, 90, 0.9); /* Slightly different blue for player */
-  border: 1px solid #39ff14; /* Neon green border for player */
+  background-color: rgba(30, 70, 90, 0.9);
+  border: 1px solid #39ff14;
   color: #f0f0f0;
-  border-top-right-radius: 0; /* "Tail" effect on the other side */
+  border-bottom-right-radius: 0;
   box-shadow: 0 2px 5px rgba(57, 255, 20, 0.3);
 }
 
@@ -352,4 +354,30 @@
   background-color: rgba(0, 20, 30, 0.3);
   border-radius: 8px;
   border: 1px solid #007a99;
+}
+
+.player-info-bottom {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: auto;
+  padding: 10px;
+  position: relative;
+}
+
+.player-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #4a4a4a;
+}
+
+.dot-pattern-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1; /* Allow it to take available vertical space */
+  /* margin: 20px 0; Removed to let flexbox and parent gap control spacing */
 } 
