@@ -35,7 +35,7 @@ function GameStats() {
         {/* Row 1: User, Chaos Meter, Personal Risk, Goal */}
         <div className="stat-item">
           <div className="stat-icon">
-            <img src="/icons/user-icon.svg" alt="User Icon" width="30" height="30" />
+            <img src="/icons/user-icon.svg" alt="User Icon" width="40" height="40" />
           </div>
           <div className="stat-info">
             <span className="stat-value">{gameState.user_name}</span>
@@ -44,7 +44,7 @@ function GameStats() {
         </div>
         <div className="stat-item">
           <div className="stat-icon">
-            <img src="/icons/chaos-icon.svg" alt="Chaos Icon" width="30" height="30" />
+            <img src="/icons/chaos-icon.svg" alt="Chaos Icon" width="40" height="40" />
           </div>
           <div className="stat-info">
             <span className="stat-value">{gameState.chaos_meter}</span>
@@ -53,7 +53,7 @@ function GameStats() {
         </div>
         <div className="stat-item">
           <div className="stat-icon">
-            <img src="/icons/risk-icon.svg" alt="Risk Icon" width="30" height="30" />
+            <img src="/icons/risk-icon.svg" alt="Risk Icon" width="40" height="40" />
           </div>
           <div className="stat-info">
             <span className="stat-value">{gameState.personal_risk}</span>
@@ -62,7 +62,7 @@ function GameStats() {
         </div>
         <div className="stat-item">
           <div className="stat-icon">
-            <img src="/icons/goal-icon.svg" alt="Goal Icon" width="30" height="30" />
+            <img src="/icons/goal-icon.svg" alt="Goal Icon" width="40" height="40" />
           </div>
           <div className="stat-info">
             <span className="stat-value">{gameState.goal}</span>
@@ -73,7 +73,7 @@ function GameStats() {
         {/* Row 2: Level, Party Headcount, Active Rumors, Time Elapsed */}
         <div className="stat-item">
           <div className="stat-icon">
-            <img src="/icons/level-icon.svg" alt="Level Icon" width="30" height="30" />
+            <img src="/icons/level-icon.svg" alt="Level Icon" width="40" height="40" />
           </div>
           <div className="stat-info">
             <span className="stat-value">{gameState.level_name}</span>
@@ -82,7 +82,7 @@ function GameStats() {
         </div>
         <div className="stat-item">
           <div className="stat-icon">
-            <img src="/icons/headcount-icon.svg" alt="Headcount Icon" width="30" height="30" />
+            <img src="/icons/headcount-icon.svg" alt="Headcount Icon" width="40" height="40" />
           </div>
           <div className="stat-info">
             <span className="stat-value">{gameState.party_headcount}</span>
@@ -91,7 +91,7 @@ function GameStats() {
         </div>
         <div className="stat-item">
           <div className="stat-icon">
-            <img src="/icons/rumors-icon.svg" alt="Rumors Icon" width="30" height="30" />
+            <img src="/icons/rumors-icon.svg" alt="Rumors Icon" width="40" height="40" />
           </div>
           <div className="stat-info">
             <span className="stat-value">{gameState.active_rumors}</span>
@@ -100,7 +100,7 @@ function GameStats() {
         </div>
         <div className="stat-item">
           <div className="stat-icon">
-            <img src="/icons/time-icon.svg" alt="Time Icon" width="30" height="30" />
+            <img src="/icons/time-icon.svg" alt="Time Icon" width="40" height="40" />
           </div>
           <div className="stat-info">
             <span className="stat-value">{minutes}:{seconds}</span>

@@ -271,24 +271,28 @@ body,
 .stat-item {
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* Changed from center to flex-start */
-  background: rgba(0, 20, 20, 0.7); /* Make boxes transparent */
+  justify-content: flex-start;
+  background: rgba(0, 20, 20, 0.7);
   padding: 0.5rem;
   border: 1px solid #00b7eb;
-  border-radius: 0; /* Changed from 10px to 0 for flush boxes */
+  border-radius: 0;
   height: 100%;
-  /* height: 60px; Removed, now controlled by grid-template-rows */
-  box-sizing: border-box; /* Include padding and border in width/height */
-  transition: box-shadow 0.3s ease; /* Smooth transition for hover effect */
+  box-sizing: border-box;
+  transition: box-shadow 0.3s ease;
+  position: relative;
 }
 
 .stat-item:hover {
-  box-shadow: 15px 15px 15px 15px #00b7eb; /* Glow effect on hover */
+  box-shadow: 
+    inset 0 0 20px 0 rgba(0, 183, 235, 0.8),
+    0 0 20px 0 rgba(0, 183, 235, 0.8);
+  border: 2px solid #00b7eb;
 }
 
 .stat-icon {
   width: 30px;
   height: 30px;
+  margin-left: 1rem;
   margin-right: 0.5rem;
 }
 
