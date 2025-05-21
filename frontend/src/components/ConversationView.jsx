@@ -1,15 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './ConversationView.css';
 import Dial from './Dial.jsx';
 import EmotionBar from './EmotionBar.jsx';
 
 function ConversationView() {
+  const inputRef = useRef(null);
   const [npcMessage, setNpcMessage] = useState({ text: 'Hello! I am the CEO. Ask me anything.', isLoading: false });
   const [playerMessage, setPlayerMessage] = useState(null);
   const [playerInputText, setPlayerInputText] = useState('');
   const [isPlayerInputLocked, setIsPlayerInputLocked] = useState(false);
   const [angerLevel, setAngerLevel] = useState(57);
   const [trustLevel, setTrustLevel] = useState(25);
+
+  useEffect(() => {
+    if (!isPlayerInputLocked) {
+      // Small delay to ensure the input is enabled before focusing
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
+    }
+  }, [isPlayerInputLocked]);
 
   const handleSendMessage = () => {
     if (playerInputText.trim() === '' || isPlayerInputLocked) return;
@@ -72,6 +82,7 @@ function ConversationView() {
       <div className="input-area">
         <div className={`input-wrapper ${isPlayerInputLocked ? 'locked' : ''}`}>
           <input
+            ref={inputRef}
             type="text"
             value={playerInputText}
             onChange={(e) => setPlayerInputText(e.target.value)}
