@@ -3,6 +3,7 @@ import './ConversationView.css';
 import Dial from './Dial.jsx';
 import EmotionBar from './EmotionBar.jsx';
 import VoiceDotCone from './VoiceDotCone.jsx';
+import PlayerNotes from './PlayerNotes.jsx';
 
 function ConversationView() {
   const inputRef = useRef(null);
@@ -84,6 +85,7 @@ function ConversationView() {
           <div className='anger-bar-section'>
             <EmotionBar angerLevel={angerLevel} />
           </div>
+          <PlayerNotes />
         </div>
       </div>
 

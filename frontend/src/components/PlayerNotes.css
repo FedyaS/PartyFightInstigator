@@ -1,0 +1,41 @@
+.player-notes-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%; /* Make it fill available space in parent */
+  gap: 8px; /* Space between label and textarea */
+}
+
+.player-notes-label {
+  font-size: 0.9em;
+  color: #ffffff;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-family: 'Orbitron', sans-serif; /* Futuristic font */
+  text-align: center; /* Center the label */
+}
+
+.player-notes-input {
+  flex-grow: 1; /* Allow textarea to fill available vertical space */
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid #00b7eb; /* Neon blue border */
+  border-radius: 8px; /* Slightly rounded corners */
+  background-color: rgba(0, 20, 30, 0.5); /* Partially transparent blueish, matching theme */
+  color: #e0e0e0; /* Light grey text */
+  font-size: 0.9rem; /* Slightly smaller than chat input */
+  font-family: 'Arial', sans-serif;
+  resize: none; /* Disable manual resizing by user */
+  box-sizing: border-box; /* Ensure padding and border are included in width/height */
+}
+
+.player-notes-input::placeholder {
+  color: #888;
+  font-style: italic;
+}
+
+.player-notes-input:focus {
+  outline: none;
+  border-color: #39ff14; /* Neon green focus, consistent with chat input */
+  box-shadow: 0 0 8px #39ff14;
+} 
