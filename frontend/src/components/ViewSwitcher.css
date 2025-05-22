@@ -1,0 +1,31 @@
+.view-switcher {
+  display: flex;
+  gap: 2px;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 4px;
+  border-radius: 8px;
+  margin-bottom: 0rem;
+}
+
+.view-option {
+  flex: 1;
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 6px;
+}
+
+.view-option:hover {
+  background: rgba(0, 183, 235, 0.1);
+}
+
+.view-option.active {
+  background: rgba(0, 183, 235, 0.2);
+  box-shadow: 0 0 15px #00b7eb;
+  color: #00b7eb;
+} 
