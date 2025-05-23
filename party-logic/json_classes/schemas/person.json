@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["id", "name", "mbti", "description", "is_npc", "anger", "gullibility", "convo_stay", "secret_ids", "rumor_ids"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the person"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the person"
+    },
+    "mbti": {
+      "type": "string",
+      "description": "MBTI personality type",
+      "enum": [
+        "ISTJ", "ISFJ", "INFJ", "INTJ",
+        "ISTP", "ISFP", "INFP", "INTP",
+        "ESTP", "ESFP", "ENFP", "ENTP",
+        "ESTJ", "ESFJ", "ENFJ", "ENTJ"
+      ]
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the person"
+    },
+    "is_npc": {
+      "type": "boolean",
+      "description": "Whether the person is an NPC"
+    },
+    "anger": {
+      "type": "number",
+      "description": "Anger level of the person",
+      "minimum": 0,
+      "maximum": 1000
+    },
+    "gullibility": {
+      "type": "number",
+      "description": "Gullibility level of the person",
+      "minimum": 0,
+      "maximum": 1000
+    },
+    "convo_stay": {
+      "type": "number",
+      "description": "How long the person typically stays in conversations",
+      "minimum": 0,
+      "maximum": 1000
+    },
+    "secret_ids": {
+      "type": "array",
+      "description": "List of secret IDs associated with this person",
+      "items": {
+        "type": "string"
+      }
+    },
+    "rumor_ids": {
+      "type": "array",
+      "description": "List of rumor IDs associated with this person",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+} 

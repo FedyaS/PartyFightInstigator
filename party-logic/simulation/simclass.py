@@ -4,7 +4,7 @@ import json
 from utils import create_id, load_json
 
 from person import Person
-from secret import Secret
+from npcsecret import NPCSecret
 from rumor import Rumor
 
 class Simulation:

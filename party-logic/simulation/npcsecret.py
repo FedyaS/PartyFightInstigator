@@ -1,6 +1,6 @@
 from simulation.utils import apply_random_modifier, create_id, load_json
 
-class Secret:
+class NPCSecret:
     def __init__(self, id=None, text='', conceal_score=500, randomize_stats=0, subject_ids=None, from_json=''):
         data = load_json(from_json)
         if data:
@@ -25,6 +25,6 @@ class Secret:
             "Concealment": self.conceal_score,
             "Subjects IDs": self.subject_ids if self.subject_ids else "None"
         }
-        print("Secret:")
+        print("NPCSecret:")
         for key, value in attrs.items():
             print(f"{' ' * indent}{key}: {value}")
