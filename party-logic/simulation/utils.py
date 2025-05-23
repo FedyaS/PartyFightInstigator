@@ -4,7 +4,7 @@ import string
 def floor_ceiling_round(value):
     rounded = int(round(value))
     not_below = max(0, rounded)
-    not_above = min(not_below, 100)
+    not_above = min(not_below, 1000)
     
     return not_above
 

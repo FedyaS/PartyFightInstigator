@@ -17,13 +17,14 @@ def test_floor_ceiling_round():
     assert floor_ceiling_round(-0.4) == 0
 
     # Test for value above range (after rounding)
-    assert floor_ceiling_round(150.3) == 100
-    assert floor_ceiling_round(100.6) == 100
+    assert floor_ceiling_round(1050.3) == 1000
+    assert floor_ceiling_round(1000.6) == 1000
 
     # Edge cases
     assert floor_ceiling_round(0) == 0
-    assert floor_ceiling_round(100) == 100
+    assert floor_ceiling_round(1000) == 1000
     assert floor_ceiling_round(99.6) == 100
+    assert floor_ceiling_round(999.9) == 1000
 
 @patch('random.choices')
 def test_create_id(mock_choices):

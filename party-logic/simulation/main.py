@@ -25,7 +25,11 @@ def simple_run():
             print(f"{P2.name} got jealous and will be spreading rumours!")
 
 def main():
-    simple_run()
+    # simple_run()
+    p = Person(randomize_stats=200)
+    p2 = Person()
+    p.pretty_print()
+    p2.pretty_print()
 
 if __name__ == '__main__':
     main()
