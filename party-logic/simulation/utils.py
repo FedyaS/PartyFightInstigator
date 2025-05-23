@@ -22,11 +22,11 @@ def apply_random_modifier(value, randradius):
     value = floor_ceiling_round(value)
     return value
 
-def load_json(filename):
+def load_json(filename, class_type):
     if not filename:
         return None
 
-    load_path = os.path.join(PROJECT_ROOT, 'json_classes', filename)
+    load_path = os.path.join(PROJECT_ROOT, 'json_classes', class_type, filename)
     if os.path.exists(load_path):
         with open(load_path, 'r') as file:
             data = json.load(file)

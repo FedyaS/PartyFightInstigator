@@ -69,11 +69,14 @@ def test_apply_random_modifier(mock_uniform):
     assert result == 45  # 49.6 - 5 = 44.6, rounded to 45
 
 def test_load_json():
-    test_data = load_json('test.json')
+    test_data = load_json('test.json', '')
     assert test_data == { "value": 1, "nested": { "value-x": 2} }
 
-    bad_data = load_json('bad.json')
+    bad_data = load_json('bad.json', '')
     assert bad_data is None
 
-    blank = load_json('')
+    blank = load_json('', '')
     assert blank is None
+
+    test_data = load_json('simulation-test-simulation.json', 'simulation')
+    assert test_data['id'] == 'test-sim-123'

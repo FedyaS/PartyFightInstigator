@@ -1,0 +1,12 @@
+{
+  "id": "CCCCCCCC",
+  "name": "Emma Thompson",
+  "mbti": "ISTJ",
+  "description": "A reliable and organized individual who takes pride in their work. Practical and detail-oriented, they prefer to work behind the scenes to ensure everything runs smoothly.",
+  "is_npc": true,
+  "anger": 150,
+  "gullibility": 200,
+  "convo_stay": 300,
+  "secret_ids": [],
+  "rumor_ids": []
+} 

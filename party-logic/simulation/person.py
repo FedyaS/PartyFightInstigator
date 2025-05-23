@@ -15,7 +15,7 @@ class Person:
     def __init__(self, id=None, name=None, mbti=None, description='', is_npc=True,
                  anger=0, gullibility=500, convo_stay=500, randomize_stats=0,
                  secrets=None, rumor_ids=None, from_json=''):
-        data = load_json(from_json)
+        data = load_json(from_json, 'person')
         if data:
             self.id = data['id']
             self.name = data['name']

@@ -2,7 +2,7 @@ from simulation.utils import apply_random_modifier, create_id, load_json
 
 class NPCSecret:
     def __init__(self, id=None, text='', conceal_score=500, randomize_stats=0, subject_ids=None, from_json=''):
-        data = load_json(from_json)
+        data = load_json(from_json, 'npcsecret')
         if data:
             self.id = data['id']
             self.text = data['text']

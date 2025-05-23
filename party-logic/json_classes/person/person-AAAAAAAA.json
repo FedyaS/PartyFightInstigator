@@ -1,0 +1,12 @@
+{
+  "id": "AAAAAAAA",
+  "name": "Sarah Chen",
+  "mbti": "INTJ",
+  "description": "A strategic thinker who values efficiency and innovation. Known for their sharp wit and ability to see patterns others miss. While reserved, they're deeply passionate about their interests.",
+  "is_npc": true,
+  "anger": 200,
+  "gullibility": 150,
+  "convo_stay": 400,
+  "secret_ids": ["AAAAAABB", "AAAAAACC"],
+  "rumor_ids": []
+} 

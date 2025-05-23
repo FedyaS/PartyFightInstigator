@@ -1,0 +1,12 @@
+{
+  "id": "BBBBBBBB",
+  "name": "Marcus Rodriguez",
+  "mbti": "ENFP",
+  "description": "An enthusiastic and creative soul who brings energy to any room. Always ready with a new idea or adventure, they have a natural talent for connecting with others and seeing possibilities everywhere.",
+  "is_npc": true,
+  "anger": 300,
+  "gullibility": 400,
+  "convo_stay": 800,
+  "secret_ids": ["BBBBBBAA"],
+  "rumor_ids": []
+} 

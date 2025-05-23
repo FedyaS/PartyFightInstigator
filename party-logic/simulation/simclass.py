@@ -9,7 +9,7 @@ from simulation.rumor import Rumor
 
 class Simulation:
     def __init__(self, id=None, people=None, from_json=''):
-        data = load_json(from_json)
+        data = load_json(from_json, 'simulation')
         if data:
             self.id = data['id']
             self.people = [Person(from_json=f"person-{pid}.json") for pid in data['person_ids']]
