@@ -1,0 +1,6 @@
+{
+  "value": 1,
+  "nested": {
+    "value-x": 2
+  }
+}

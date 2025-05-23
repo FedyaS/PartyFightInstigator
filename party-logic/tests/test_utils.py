@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import patch
 import string
 import random
-from simulation.utils import floor_ceiling_round, create_id, apply_random_modifier
+from simulation.utils import floor_ceiling_round, create_id, apply_random_modifier, load_json
 
 def test_floor_ceiling_round():
     # Test for value within range
@@ -29,25 +29,25 @@ def test_floor_ceiling_round():
 @patch('random.choices')
 def test_create_id(mock_choices):
     # Mock random.choices to return a predictable value
-    mock_choices.return_value = ['A', 'B', 'C', 'D', 'E', 'F']
+    mock_choices.return_value = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
     
     # Generate ID
     generated_id = create_id()
     
     # Check if the generated ID matches the mocked value
-    assert generated_id == 'ABCDEF'
+    assert generated_id == 'ABCDEFGH'
     
     # Ensure random.choices is called with the correct arguments
-    mock_choices.assert_called_with(string.ascii_uppercase, k=6)
+    mock_choices.assert_called_with(string.ascii_uppercase, k=8)
 
 @patch('random.choices')
 def test_create_id_randomness(mock_choices):
     # Mock random.choices to return a different predictable value
-    mock_choices.return_value = ['X', 'Y', 'Z', 'W', 'V', 'U']
+    mock_choices.return_value = ['X', 'Y', 'Z', 'W', 'V', 'U', 'K', 'M']
     
     # Generate ID and check that it's the correct mocked value
     generated_id = create_id()
-    assert generated_id == 'XYZWVU'
+    assert generated_id == 'XYZWVUKM'
 
 @patch('random.uniform')
 def test_apply_random_modifier(mock_uniform):
@@ -67,3 +67,13 @@ def test_apply_random_modifier(mock_uniform):
     # Test for rounding behavior
     result = apply_random_modifier(49.6, 10)  # Random multiplier = -0.5, deviation = -5
     assert result == 45  # 49.6 - 5 = 44.6, rounded to 45
+
+def test_load_json():
+    test_data = load_json('test.json')
+    assert test_data == { "value": 1, "nested": { "value-x": 2} }
+
+    bad_data = load_json('bad.json')
+    assert bad_data is None
+
+    blank = load_json('')
+    assert blank is None
