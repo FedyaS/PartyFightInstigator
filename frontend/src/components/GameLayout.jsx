@@ -2,6 +2,7 @@ import GameStats from './GameStats';
 import ConversationView from './ConversationView';
 import ViewSwitcher from './ViewSwitcher';
 import AttendeesView from './AttendeesView';
+import MapView from './MapView';
 import './GameLayout.css';
 import { useState } from 'react';
 
@@ -19,9 +20,7 @@ function GameLayout({ children }) {
         <aside className="graph-section">
           <ViewSwitcher activeView={activeView} onViewChange={setActiveView} />
           {activeView === 'MAP' ? (
-            <div className="map-view">
-              <img src="/mapBG1.png" alt="Map Background" className="map-background" />
-            </div>
+            <MapView />
           ) : (
             <AttendeesView />
           )}
