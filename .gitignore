@@ -173,6 +173,11 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
+# Pycharm
+.idea/inspectionProfiles/
+.idea/misc.xml
+.idea/*.iml
+.idea/vcs.xml
 
 # Frontend
 /node_modules
