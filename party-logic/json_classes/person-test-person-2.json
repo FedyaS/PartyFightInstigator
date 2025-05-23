@@ -1,0 +1,12 @@
+{
+    "id": "test-person-2",
+    "name": "Test Person 2",
+    "mbti": "ENFP",
+    "description": "Another test person for unit testing",
+    "is_npc": true,
+    "anger": 200,
+    "gullibility": 400,
+    "convo_stay": 600,
+    "secret_ids": [],
+    "rumor_ids": []
+} 

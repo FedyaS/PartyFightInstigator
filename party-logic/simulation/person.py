@@ -1,7 +1,7 @@
 import random
 from simulation.utils import create_id, apply_random_modifier, load_json
 
-from npcsecret import NPCSecret
+from simulation.npcsecret import NPCSecret
 
 RANDOM_NAMES = ['Tom', 'Bob', 'Joe', 'Henry', 'Will', 'Kevin', 'Alice', 'Dasha', 'Olivia', 'Janet', 'Claire']
 MBTI = [
@@ -27,7 +27,7 @@ class Person:
             self.gullibility = data['gullibility']
             self.convo_stay = data['convo_stay']
 
-            self.secrets = [NPCSecret(from_json=f"secret-{sid}.json") for sid in data['secret_ids']]
+            self.secrets = [NPCSecret(from_json=f"npcsecret-{sid}.json") for sid in data['secret_ids']]
             self.rumor_ids = data['rumor_ids']
 
         else:

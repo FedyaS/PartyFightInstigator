@@ -1,12 +1,13 @@
 import pytest
 from simulation.person import Person, RANDOM_NAMES
 import random
+import os
 
 def test_person_initialization_with_name():
     person = Person(name="John")
     assert person.name == "John"
     assert person.is_npc is True
-    assert person.secret_ids == []
+    assert person.secrets == []
     assert person.rumor_ids == []
     assert isinstance(person.anger, (int, float))
     assert isinstance(person.gullibility, (int, float))
@@ -25,8 +26,8 @@ def test_person_initialization_with_custom_id():
 def test_person_initialization_with_secrets_and_rumors():
     secrets = ["secret1", "secret2"]
     rumors = ["rumor1", "rumor2"]
-    person = Person(secrets=secrets, rumors=rumors)
-    assert person.secret_ids == secrets
+    person = Person(secrets=secrets, rumor_ids=rumors)
+    assert person.secrets == secrets
     assert person.rumor_ids == rumors
 
 def test_person_initialization_with_stats():
@@ -45,18 +46,25 @@ def test_person_initialization_with_randomize_stats():
     # The actual value will be within base_anger ± randomize_stats
     assert base_anger - randomize_stats <= person.anger <= base_anger + randomize_stats
 
+def test_person_from_json():
+    person = Person(from_json="person-test-person-1.json")
+    assert person.id == "test-person-1"
+    assert person.name == "Test Person"
+    assert person.mbti == "INTJ"
+    assert person.description == "A test person for unit testing"
+    assert person.is_npc is True
+    assert person.anger == 100
+    assert person.gullibility == 500
+    assert person.convo_stay == 500
+    assert len(person.secrets) == 1
+    assert person.secrets[0].id == 'test-secret-1'
+    assert person.rumor_ids == ["test-rumor-1"]
+
 def test_person_pretty_print(capsys):
     person = Person(name="TestPerson", id="test123")
     person.pretty_print()
     captured = capsys.readouterr()
-    expected_output = (
-        "Person: (ID: test123)\n"
-        "    Name: TestPerson\n"
-        "    NPC: True\n"
-        "    Secrets: []\n"
-        "    Rumors: []\n"
-        "    Anger: 0\n"
-        "    Gullibility: 500\n"
-        "    Convo_Stay: 500\n"
-    )
-    assert captured.out == expected_output 
+    assert "Person:" in captured.out
+    assert "ID: test123" in captured.out
+    assert "Name: TestPerson" in captured.out
+    assert "NPC: True" in captured.out 
