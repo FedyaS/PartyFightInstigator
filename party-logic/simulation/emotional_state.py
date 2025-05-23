@@ -1,5 +1,5 @@
 import random
-from utils import apply_random_modifier
+from simulation.utils import apply_random_modifier
 
 class EmotionalState:
     def __init__(self, joy=50, anger=10, anxiety=50, jealousy=10, curiosity=50, randomize_radius=0):

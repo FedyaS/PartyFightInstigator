@@ -1,6 +1,6 @@
-from person import Person
-from relationships import RelationshipManager
-from utils import floor_ceiling_round
+from simulation.person import Person
+from simulation.relationships import RelationshipManager
+from simulation.utils import floor_ceiling_round
 
 def average_out(v1, v2, strength):
     """

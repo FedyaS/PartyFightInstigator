@@ -1,5 +1,5 @@
-from person import Person
-from utils import apply_random_modifier
+from simulation.person import Person
+from simulation.utils import apply_random_modifier
 
 class Relationship:
     def __init__(self, trust=50, resentment=0):

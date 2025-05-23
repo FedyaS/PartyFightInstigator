@@ -1,6 +1,6 @@
 import random
-from emotional_state import EmotionalState
-from utils import create_id
+from simulation.emotional_state import EmotionalState
+from simulation.utils import create_id
 
 RANDOM_NAMES = ['Tom', 'Bob', 'Joe', 'Henry', 'Will', 'Kevin', 'Alice', 'Dasha', 'Olivia', 'Janet', 'Claire']
 
