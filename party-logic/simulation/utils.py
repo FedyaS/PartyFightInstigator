@@ -31,4 +31,6 @@ def load_json(filename, class_type):
         with open(load_path, 'r') as file:
             data = json.load(file)
         return data
-    return None
+    else:
+        # If file passed is not found, we want to raise to avoid silently not finding files
+        raise FileNotFoundError(f"No file found at {load_path}")

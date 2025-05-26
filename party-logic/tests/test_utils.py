@@ -72,8 +72,8 @@ def test_load_json():
     test_data = load_json('test.json', '')
     assert test_data == { "value": 1, "nested": { "value-x": 2} }
 
-    bad_data = load_json('bad.json', '')
-    assert bad_data is None
+    with pytest.raises(FileNotFoundError):
+        load_json('bad.json', '')
 
     blank = load_json('', '')
     assert blank is None
