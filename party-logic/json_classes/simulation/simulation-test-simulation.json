@@ -2,5 +2,13 @@
     "id": "test-sim-123",
     "min_convos": 1,
     "max_convos": 5,
-    "person_ids": ["test-person-1", "test-person-2"]
+    "person_ids": ["test-person-1", "test-person-2"],
+    "relationships": [
+        {
+            "person1_id":  "test-person-1",
+            "person2_id":  "test-person-2",
+            "trust": 222,
+            "animosity": 333
+        }
+    ]
 }

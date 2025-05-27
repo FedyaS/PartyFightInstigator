@@ -18,8 +18,8 @@ class Simulation:
         data = load_json(from_json, 'simulation')
         if data:
             self.id = data['id']
-            self.min_convos = data['max_convos']
-            self.max_convos = data['min_convos']
+            self.min_convos = data['min_convos']
+            self.max_convos = data['max_convos']
             self.people = {pid: Person(from_json=f"person-{pid}.json") for pid in data['person_ids']}
             self.relationships = {}
             for r in data['relationships']:
@@ -57,7 +57,7 @@ class Simulation:
         min_participants = 1
         max_participants = len(self.people) // self.max_convos + 1
         available_people = list(self.people.values())
-        available_people = [p for p in available_people if p.current_conversation is None]
+        available_people = [p for p in available_people if p.active_conversation is None]
 
         for _ in range(initial_convos):
             if not available_people:
@@ -71,6 +71,38 @@ class Simulation:
                 self.conversations[conv.id] = conv
                 available_people = [p for p in available_people if p.active_conversation is None]
 
+    def lucky_end_conversation(self):
+        # End a Convo
+        chance_will_end = CHANCE_TO_END_CONVO_PER_TICK / MAX_VAL
+        if (
+                len(self.conversations) > self.min_convos and
+                random.random() < chance_will_end
+        ):
+            conv_to_end: NPCConvo = random.choice(list(self.conversations.values()))
+            conv_to_end.end_conversation()
+            self.conversations.pop(conv_to_end.id)
+
+
+    def lucky_begin_conversation(self):
+        # Start a Convo
+        chance_will_start = CHANCE_TO_START_CONVO_PER_TICK / MAX_VAL
+        if (
+                len(self.conversations) < self.max_convos and
+                random.random() > chance_will_start
+        ):
+
+            available_people = list(self.people.values())
+            available_people = [p for p in available_people if p.active_conversation is None]
+            min_participants = 1
+            max_participants = len(available_people) // self.max_convos + 1
+            num_participants = random.randint(min_participants, max_participants)
+            participants = random.sample(available_people, num_participants)
+
+            if len(participants) >= min_participants:
+                conv = NPCConvo(participants)
+                self.conversations[conv.id] = conv
+
+
     def tick(self):
         for p in self.people.values():
             p.reduce_anger(ANGER_DROP_PER_TICK)
@@ -83,5 +115,7 @@ class Simulation:
                 # start fight
                 pass
 
+        self.lucky_begin_conversation()
+        self.lucky_end_conversation()
         # Manage creation and deletion of conversations
         # Manage people going into and out of conversations
