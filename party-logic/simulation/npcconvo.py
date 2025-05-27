@@ -14,23 +14,26 @@ class NPCConvo:
             if person.active_conversation is not None:
                 raise ValueError(f"Person {person.id} is already in a conversation")
 
-            person.active_conversation = self
+            person.add_to_convo(self)
 
     def add_person(self, person: Person):
         if person.active_conversation is not None:
             raise ValueError(f"Person {person.id} is already in a conversation")
 
         self.participants.append(person)
-        person.active_conversation = self
+        person.add_to_convo(self)
 
     def remove_person(self, person: Person):
         if person not in self.participants:
             raise ValueError(f"Person {person.id} is not in this conversation")
 
         self.participants.remove(person)
-        person.active_conversation = None
+        person.remove_from_convo()
 
     def end_conversation(self):
         for person in self.participants:
-            person.active_conversation = None
+            person.remove_from_convo()
         self.participants = []
+
+    def tick(self):
+        self.tick_count += 1

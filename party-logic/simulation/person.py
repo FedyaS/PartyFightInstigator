@@ -1,4 +1,7 @@
 import random
+
+from simulation.npcconvo import NPCConvo
+from simulation.rumor import Rumor
 from simulation.utils import create_id, apply_random_modifier, load_json
 
 from simulation.npcsecret import NPCSecret
@@ -14,7 +17,7 @@ MBTI = [
 class Person:
     def __init__(self, id=None, name=None, mbti=None, description='', is_npc=True,
                  anger=0, gullibility=500, convo_stay=500, randomize_stats=0,
-                 secrets=None, rumor_ids=None, from_json=''):
+                 secrets=None, rumors=None, from_json=''):
         data = load_json(from_json, 'person')
         if data:
             self.id = data['id']
@@ -28,13 +31,13 @@ class Person:
             self.convo_stay = data['convo_stay']
 
             self.secrets = [NPCSecret(from_json=f"npcsecret-{sid}.json") for sid in data['secret_ids']]
-            self.rumor_ids = data['rumor_ids']
+            rumors = [Rumor(from_json=f"rumor-{rid}.json") for rid in data['rumor_ids']]
 
         else:
             if secrets is None:
                 secrets = []
-            if rumor_ids is None:
-                rumor_ids = []
+            if rumors is None:
+                rumors = []
 
             self.id = id or create_id()
             self.name = name or random.choice(RANDOM_NAMES)
@@ -47,9 +50,22 @@ class Person:
             self.convo_stay = apply_random_modifier(convo_stay, randomize_stats)
 
             self.secrets = secrets
-            self.rumor_ids = rumor_ids
 
+        self.rumors = set(rumors)
         self.active_conversation = None
+        self.active_conversation_ticks = 0
+        self.active_conversation_max_ticks = 0
+
+    def add_to_convo(self, conversation: NPCConvo):
+        self.active_conversation = None
+        self.active_conversation_ticks = 0
+        will_stay_for = apply_random_modifier(self.convo_stay, 200)
+        self.active_conversation_max_ticks = will_stay_for
+
+    def remove_from_convo(self):
+        self.active_conversation = None
+        self.active_conversation_ticks = 0
+        self.active_conversation_max_ticks = 0
 
     def pretty_print(self, indent=4):
         attrs = {

@@ -1,6 +1,7 @@
 import os
 import json
 import random
+from curses import start_color
 from typing import List
 
 from simulation.utils import create_id, load_json, get_cross_id
@@ -82,7 +83,6 @@ class Simulation:
             conv_to_end.end_conversation()
             self.conversations.pop(conv_to_end.id)
 
-
     def lucky_begin_conversation(self):
         # Start a Convo
         chance_will_start = CHANCE_TO_START_CONVO_PER_TICK / MAX_VAL
@@ -102,20 +102,54 @@ class Simulation:
                 conv = NPCConvo(participants)
                 self.conversations[conv.id] = conv
 
+    def lucky_manage_people_in_conversations(self):
+        for person in self.people.values():
+            if person.active_conversation:
+                if (
+                        person.active_conversation_ticks > person.active_conversation_max_ticks and
+                        REMOVE_PERSON_FROM_CONVO_CHANCE / 1000 > random.random()
+                ):
+                    conv: NPCConvo = person.active_conversation
+                    conv.remove_person(person)
+
+            else:
+                if ADD_PERSON_TO_CONVO_CHANCE / 1000 > random.random():
+                    conv_to_add_to: NPCConvo = random.choice(list(self.conversations.values()))
+                    conv_to_add_to.add_person(person)
+
+    @staticmethod
+    def check_for_fight(relationship: Relationship):
+        anger1 = relationship.person1.anger
+        anger2 = relationship.person2.anger
+        animosity = relationship.animosity
+
+        if anger1 > MIN_ANGER_FOR_FIGHT and anger2 > MIN_ANGER_FOR_FIGHT and animosity > MIN_ANIMOSITY_FOR_FIGHT:
+            return True
+
+        return False
+
+    def start_fight(self, p1: Person, p2: Person):
+        print(f"p1{p1.name} and p2{p2.name} are fighting")
 
     def tick(self):
+        # Naturally reduce anger
         for p in self.people.values():
             p.reduce_anger(ANGER_DROP_PER_TICK)
 
+        # Progress Conversations
         for c in self.conversations.values():
             c.tick()
 
+        # Check for Fights
         for r in self.relationships.values():
-            if r.animosity > 10000:
-                # start fight
-                pass
+            if self.check_for_fight(r):
+                self.start_fight(r.person1, r.person2)
 
+        # Manage creation and deletion of conversations
         self.lucky_begin_conversation()
         self.lucky_end_conversation()
-        # Manage creation and deletion of conversations
+
         # Manage people going into and out of conversations
+        self.lucky_manage_people_in_conversations()
+
+        self.tick_count += 1
