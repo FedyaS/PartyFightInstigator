@@ -1,7 +1,6 @@
 import os
 import json
 import random
-from curses import start_color
 from typing import List
 
 from simulation.utils import create_id, load_json, get_cross_id

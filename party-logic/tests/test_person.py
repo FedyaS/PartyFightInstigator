@@ -8,7 +8,7 @@ def test_person_initialization_with_name():
     assert person.name == "John"
     assert person.is_npc is True
     assert person.secrets == []
-    assert person.rumor_ids == []
+    assert person.rumors == set()
     assert isinstance(person.anger, (int, float))
     assert isinstance(person.gullibility, (int, float))
     assert isinstance(person.convo_stay, (int, float))
@@ -26,9 +26,9 @@ def test_person_initialization_with_custom_id():
 def test_person_initialization_with_secrets_and_rumors():
     secrets = ["secret1", "secret2"]
     rumors = ["rumor1", "rumor2"]
-    person = Person(secrets=secrets, rumor_ids=rumors)
+    person = Person(secrets=secrets, rumors=rumors)
     assert person.secrets == secrets
-    assert person.rumor_ids == rumors
+    assert person.rumors == set(rumors)
 
 def test_person_initialization_with_stats():
     anger = 100
@@ -58,7 +58,7 @@ def test_person_from_json():
     assert person.convo_stay == 500
     assert len(person.secrets) == 1
     assert person.secrets[0].id == 'test-secret-1'
-    assert person.rumor_ids == ["test-rumor-1"]
+    assert person.rumors == set()
 
 def test_person_pretty_print(capsys):
     person = Person(name="TestPerson", id="test123")

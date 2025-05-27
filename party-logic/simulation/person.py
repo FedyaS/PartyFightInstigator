@@ -1,10 +1,12 @@
 import random
+from typing import TYPE_CHECKING, Set, List
 
-from simulation.npcconvo import NPCConvo
 from simulation.rumor import Rumor
 from simulation.utils import create_id, apply_random_modifier, load_json
-
 from simulation.npcsecret import NPCSecret
+
+if TYPE_CHECKING:
+    from simulation.npcconvo import NPCConvo
 
 RANDOM_NAMES = ['Tom', 'Bob', 'Joe', 'Henry', 'Will', 'Kevin', 'Alice', 'Dasha', 'Olivia', 'Janet', 'Claire']
 MBTI = [
@@ -31,13 +33,16 @@ class Person:
             self.convo_stay = data['convo_stay']
 
             self.secrets = [NPCSecret(from_json=f"npcsecret-{sid}.json") for sid in data['secret_ids']]
-            rumors = [Rumor(from_json=f"rumor-{rid}.json") for rid in data['rumor_ids']]
+            self.rumors = set() # No loading rumors from json for now
 
         else:
             if secrets is None:
                 secrets = []
+            self.secrets = secrets
+
             if rumors is None:
                 rumors = []
+            self.rumors = set(rumors)
 
             self.id = id or create_id()
             self.name = name or random.choice(RANDOM_NAMES)
@@ -49,15 +54,12 @@ class Person:
             self.gullibility = apply_random_modifier(gullibility, randomize_stats)
             self.convo_stay = apply_random_modifier(convo_stay, randomize_stats)
 
-            self.secrets = secrets
-
-        self.rumors = set(rumors)
-        self.active_conversation = None
+        self.active_conversation: 'NPCConvo' = None
         self.active_conversation_ticks = 0
         self.active_conversation_max_ticks = 0
 
-    def add_to_convo(self, conversation: NPCConvo):
-        self.active_conversation = None
+    def add_to_convo(self, conversation: 'NPCConvo'):
+        self.active_conversation = conversation
         self.active_conversation_ticks = 0
         will_stay_for = apply_random_modifier(self.convo_stay, 200)
         self.active_conversation_max_ticks = will_stay_for
@@ -78,7 +80,7 @@ class Person:
             "Gullibility": self.gullibility,
             "Convo Stay": self.convo_stay,
             "Secrets": [s.id for s in self.secrets] if self.secrets else "None",
-            "Rumor IDs": self.rumor_ids if self.rumor_ids else "None"
+            "Rumor IDs": [r.id for r in self.rumors] if self.rumors else "None"
         }
         print("Person:")
         for key, value in attrs.items():
