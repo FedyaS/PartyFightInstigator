@@ -1,48 +1,12 @@
-from simulation.person import Person
 from simulation.utils import apply_random_modifier
+from simulation.person import Person
 
 class Relationship:
-    def __init__(self, trust=50, resentment=0):
-        self.trust = trust
-        self.resentment = resentment
-
-class RelationshipManager:
-    # (person1.id, person2.id) → person1's view of person2
-    def __init__(self):
-        self.relations = {}  # key: tuple of (id1, id2), value: Relationship object
-
-    def _key(self, id1, id2):
-        return (id1, id2)
-
-    def set_relationship(self, p1: Person, p2: Person, trust=50, resentment=0):
-        self.relations[self._key(p1.id, p2.id)] = Relationship(trust, resentment)
-
-    def get_relationship(self, p1: Person, p2: Person) -> Relationship:
-        return self.relations.get(self._key(p1.id, p2.id), None)
-
-    def update_relationship(self, p1: Person, p2: Person, trust=None, resentment=None):
-        rel = self.get_relationship(p1, p2)
-        if rel:
-            if trust is not None:
-                rel.trust = trust
-            if resentment is not None:
-                rel.resentment = resentment
-        else:
-            self.set_relationship(p1, p2, trust or 50, resentment or 0)
-
-    def get_outgoing_relationships(self, person):
-        """Here's how this person feels about others."""
-        return {
-            id2: rel
-            for (id1, id2), rel in self.relations.items()
-            if id1 == person.id
-        }
-    
-    def init_all_relationships(self, people: list[Person], trust=50, resentment=0, randomize_range=0):
-        for p1 in people:
-            for p2 in people:
-                if p1.id != p2.id:
-                    my_trust = apply_random_modifier(trust, randomize_range) if randomize_range else trust
-                    my_resentment = apply_random_modifier(resentment, randomize_range) if randomize_range else resentment
-                    self.set_relationship(p1, p2, trust=my_trust, resentment=my_resentment)
-
+    def __init__(self, person1: Person, person2: Person, trust=500, animosity=0, randomize_stats=0):
+        # Sort persons by ID to ensure consistent ordering
+        sorted_persons = sorted([person1, person2], key=lambda p: p.id)
+        self.person1 = sorted_persons[0]  # Lower ID
+        self.person2 = sorted_persons[1]  # Higher ID
+        self.id = (self.person1.id, self.person2.id)
+        self.trust = apply_random_modifier(trust, randomize_stats)
+        self.animosity = apply_random_modifier(animosity, randomize_stats)

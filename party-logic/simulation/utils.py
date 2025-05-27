@@ -34,3 +34,6 @@ def load_json(filename, class_type):
     else:
         # If file passed is not found, we want to raise to avoid silently not finding files
         raise FileNotFoundError(f"No file found at {load_path}")
+
+def get_cross_id(id1, id2):
+    return (min(id1, id2), max(id1, id2))

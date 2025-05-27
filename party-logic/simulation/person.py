@@ -49,6 +49,8 @@ class Person:
             self.secrets = secrets
             self.rumor_ids = rumor_ids
 
+        self.active_conversation = None
+
     def pretty_print(self, indent=4):
         attrs = {
             "ID": self.id,

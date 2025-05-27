@@ -1,11 +1,19 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
-  "required": ["id", "person_ids"],
+  "required": ["id", "person_ids", "min_convos", "max_convos"],
   "properties": {
     "id": {
       "type": "string",
       "description": "Unique identifier for the simulation"
+    },
+    "min_convos": {
+      "type": "integer",
+      "description": "Minimum number of active conversations to keep in the simulation"
+    },
+    "max_convos": {
+      "type": "integer",
+      "description": "Maximum number of active conversations to run in the simulation"
     },
     "person_ids": {
       "type": "array",
@@ -13,6 +21,36 @@
       "items": {
         "type": "string"
       }
+    },
+    "relationships": {
+      "type": "array",
+      "description": "Relationships between people in simulation",
+      "items": {
+        "type": "object",
+        "required": ["person1_id", "person2_id", "trust", "animosity"],
+        "properties": {
+          "person1_id": {
+            "type": "string",
+            "description": "ID of the first person, must be present in person_ids"
+          },
+          "person2_id": {
+            "type": "string",
+            "description": "ID of the first person, must be present in person_ids"
+          },
+          "trust": {
+            "type": "integer",
+            "description": "The trust between these two people",
+            "minimum": 0,
+            "maximum": 1000
+          },
+          "animosity": {
+            "type": "integer",
+            "description": "How much these two people despise each other",
+            "minimum": 0,
+            "maximum": 1000
+          }
+        }
+      }
     }
   }
-} 
+}

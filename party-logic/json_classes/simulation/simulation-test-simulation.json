@@ -1,4 +1,6 @@
 {
     "id": "test-sim-123",
+    "min_convos": 1,
+    "max_convos": 5,
     "person_ids": ["test-person-1", "test-person-2"]
-} 
+}

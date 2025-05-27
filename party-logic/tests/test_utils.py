@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import patch
 import string
 import random
-from simulation.utils import floor_ceiling_round, create_id, apply_random_modifier, load_json
+from simulation.utils import floor_ceiling_round, create_id, apply_random_modifier, load_json, get_cross_id
 
 def test_floor_ceiling_round():
     # Test for value within range
@@ -80,3 +80,7 @@ def test_load_json():
 
     test_data = load_json('simulation-test-simulation.json', 'simulation')
     assert test_data['id'] == 'test-sim-123'
+
+def test_get_cross_id():
+    assert ('abc', 'def') == get_cross_id('abc', 'def')
+    assert ('abc', 'def') == get_cross_id('def', 'abc')
