@@ -94,7 +94,7 @@ class NPCConvo:
         return person, rumor, score
 
     def spread_rumor(self, simulation: 'Simulation'):
-        if  RUMOR_SPREAD_CHANCE / MAX_VAL > random.random():
+        if RUMOR_SPREAD_CHANCE / MAX_VAL > random.random():
             spreader, rumor, score = self.choose_rumor_to_spread(simulation)
             if spreader and rumor:
                 for person in self.participants:
@@ -106,6 +106,7 @@ class NPCConvo:
                                 rumor.plausibility / MAX_VAL)
                         believed_it = believed_chance > random.random()
 
+                        print("hitting here")
                         if believed_it:
                             relationship.trust += TRUST_INCREASE_ON_RUMOR_BELIEF
                             person.anger += int(rumor.harmfulness * ANGER_INCREASE_PER_RUMOR_HARM)

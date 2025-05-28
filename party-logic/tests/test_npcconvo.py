@@ -4,6 +4,9 @@ from simulation.npcconvo import NPCConvo
 from simulation.person import Person
 from simulation.simclass import Simulation
 from simulation.rumor import Rumor
+from simulation.settings import MAX_VAL, ANGER_ADJUSTMENT_FACTOR, ANGER_ANIMOSITY_FACTOR, ANGER_DECAY, \
+    TRUST_DECREASE_ON_RUMOR_DISBELIEF
+
 
 @pytest.fixture
 def mock_simulation():
@@ -179,3 +182,159 @@ def test_tick_with_rumor_spread(mock_simulation, mock_person, mock_rumor):
             
             # Verify that both rumor spread and emotion spread were called
             assert convo.tick_count == 10 
+
+def test_spread_emotions_with_high_anger(mock_simulation):
+    # Setup two people with high anger levels
+    person1 = Mock(spec=Person)
+    person1.id = "person1"
+    person1.anger = 800
+    person1.active_conversation = None
+    
+    person2 = Mock(spec=Person)
+    person2.id = "person2"
+    person2.anger = 900
+    person2.active_conversation = None
+    
+    convo = NPCConvo([person1, person2])
+    
+    # Test emotion spreading
+    convo.spread_emotions(mock_simulation)
+    
+    # Verify that emotions were adjusted and animosity increased
+    relationship = mock_simulation.get_relationship(person1, person2)
+    assert relationship.animosity > 0  # Animosity should increase with high anger levels
+    
+    # Verify anger levels were adjusted
+    assert person1.anger != 800 or person2.anger != 900  # At least one should change
+
+def test_spread_emotions_with_trust_influence(mock_simulation):
+    # Setup two people with different anger levels and high trust
+    person1 = Mock(spec=Person)
+    person1.id = "person1"
+    person1.anger = 200
+    person1.active_conversation = None
+    
+    person2 = Mock(spec=Person)
+    person2.id = "person2"
+    person2.anger = 800
+    person2.active_conversation = None
+    
+    # Set high trust in relationship
+    relationship = Mock(trust=900, animosity=0)
+    mock_simulation.get_relationship.return_value = relationship
+    
+    convo = NPCConvo([person1, person2])
+    
+    # Test emotion spreading
+    convo.spread_emotions(mock_simulation)
+    
+    # With high trust, anger levels should move closer together
+    anger_diff = abs(person1.anger - person2.anger)
+    assert anger_diff < 600  # Should be less than initial difference of 600
+
+def test_spread_rumor_with_subject_present(mock_simulation, mock_rumor):
+    # Setup rumor about person2
+    person1 = Mock(spec=Person)
+    person1.id = "person1"
+    person1.anger = 500
+    person1.gullibility = 500
+    person1.gossip_level = 500
+    person1.rumors = {mock_rumor}
+    person1.active_conversation = None
+    
+    person2 = Mock(spec=Person)
+    person2.id = "person2"
+    person2.anger = 500
+    person2.gullibility = 500
+    person2.gossip_level = 500
+    person2.rumors = set()
+    person2.active_conversation = None
+    person2.anger = 0
+    
+    # Make person2 the subject of the rumor
+    mock_rumor.subjects = [person2]
+    mock_rumor.originators = [person1]
+    
+    convo = NPCConvo([person1, person2])
+    
+    # Mock random.random to ensure rumor spread
+    with patch('random.random', return_value=0.0):
+        with patch('random.choices') as mock_choices:
+            mock_choices.side_effect = [
+                [(mock_rumor, 1.0)],  # First choice for personal rumor
+                [(person1, mock_rumor, 1.0)]  # Second choice for spreader
+            ]
+            convo.spread_rumor(mock_simulation)
+            
+            # Verify person2 got angry and relationship was affected
+            assert person2.anger > 0
+            relationship = mock_simulation.get_relationship(person1, person2)
+            assert relationship.animosity > 0
+            assert relationship.trust < 500  # Trust should decrease
+
+def test_spread_rumor_belief_factors(mock_simulation, mock_rumor):
+    # Setup people with different gullibility levels
+    person1 = Mock(spec=Person)
+    person1.id = "person1"
+    person1.gossip_level = 900
+    person1.anger = 500
+    person1.rumors = {mock_rumor}
+    person1.active_conversation = None
+    
+    person2 = Mock(spec=Person)
+    person2.id = "person2"
+    person2.anger = 500
+    person2.rumors = set()
+    person2.active_conversation = None
+    person2.gullibility = 200  # Low gullibility
+    
+    convo = NPCConvo([person1, person2])
+    
+    # Mock random.random to ensure rumor spread attempt
+    with patch('random.random', side_effect=[0, 0.9]):  # High threshold to test disbelief
+        with patch('random.choices') as mock_choices:
+            mock_choices.side_effect = [
+                [(mock_rumor, 1.0)],  # First choice for personal rumor
+                [(person1, mock_rumor, 1.0)]  # Second choice for spreader
+            ]
+            convo.spread_rumor(mock_simulation)
+            
+            # Verify rumor wasn't believed due to low gullibility
+            assert mock_rumor not in person2.rumors
+            relationship = mock_simulation.get_relationship(person1, person2)
+            assert relationship.trust == 500 - TRUST_DECREASE_ON_RUMOR_DISBELIEF  # Trust should decrease on disbelief
+
+def test_spread_rumor_plausibility_impact(mock_simulation, mock_rumor):
+    # Setup people with same gullibility but different rumor plausibility
+    person1 = Mock(spec=Person)
+    person1.id = "person1"
+    person1.rumors = {mock_rumor}
+    person1.gossip_level = 500
+    person1.anger = 500
+    person1.active_conversation = None
+    
+    person2 = Mock(spec=Person)
+    person2.id = "person2"
+    person2.rumors = set()
+    person2.anger = 500
+    person2.active_conversation = None
+    person2.gullibility = 500
+    
+    # Set low plausibility
+    mock_rumor.plausibility = 100
+    
+    convo = NPCConvo([person1, person2])
+    
+    # Mock random.random to ensure rumor spread attempt
+    with patch('random.random', side_effect=[0, 0.5]):  # Middle threshold
+        with patch('random.choices') as mock_choices:
+            mock_choices.side_effect = [
+                [(mock_rumor, 1.0)],  # First choice for personal rumor
+                [(person1, mock_rumor, 1.0)]  # Second choice for spreader
+            ]
+            convo.spread_rumor(mock_simulation)
+            
+            # Verify rumor wasn't believed due to low plausibility
+            assert mock_rumor not in person2.rumors
+            relationship = mock_simulation.get_relationship(person1, person2)
+            assert relationship.trust < 500  # Trust should decrease on disbelief 
