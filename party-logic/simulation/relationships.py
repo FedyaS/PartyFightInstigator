@@ -1,4 +1,4 @@
-from simulation.utils import apply_random_modifier
+from simulation.utils import apply_random_modifier, floor_ceiling_round
 from simulation.person import Person
 
 class Relationship:
@@ -10,3 +10,9 @@ class Relationship:
         self.id = (self.person1.id, self.person2.id)
         self.trust = apply_random_modifier(trust, randomize_stats)
         self.animosity = apply_random_modifier(animosity, randomize_stats)
+
+    def modify_trust(self, t):
+        self.trust = floor_ceiling_round(self.trust + t)
+
+    def modify_animosity(self, a):
+        self.animosity = floor_ceiling_round(self.animosity + a)

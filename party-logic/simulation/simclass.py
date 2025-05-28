@@ -146,7 +146,7 @@ class Simulation:
     def tick(self):
         # Naturally reduce anger
         for p in self.people.values():
-            p.reduce_anger(ANGER_DROP_PER_TICK)
+            p.modify_anger(-ANGER_DROP_PER_TICK)
 
         # Progress Conversations
         for c in self.conversations.values():

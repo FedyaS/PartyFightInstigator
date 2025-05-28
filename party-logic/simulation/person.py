@@ -89,5 +89,5 @@ class Person:
         for key, value in attrs.items():
             print(f"{' ' * indent}{key}: {value}")
 
-    def reduce_anger(self, a):
-        self.anger = floor_ceiling_round(self.anger - a)
+    def modify_anger(self, a):
+        self.anger = floor_ceiling_round(self.anger + a)

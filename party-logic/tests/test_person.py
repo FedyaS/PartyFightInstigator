@@ -112,11 +112,11 @@ def test_person_reduce_anger():
     person = Person(anger=100)
     
     # Test normal reduction
-    person.reduce_anger(30)
+    person.modify_anger(-30)
     assert person.anger == 70
     
     # Test reduction below zero
-    person.reduce_anger(100)
+    person.modify_anger(-100)
     assert person.anger == 0
 
 def test_person_pretty_print_comprehensive(capsys):
@@ -182,28 +182,34 @@ def test_person_is_npc_flag():
     person = Person()
     assert person.is_npc is True 
 
-def test_person_reduce_anger_with_floor_ceiling():
+def test_person_modify_anger_with_floor_ceiling():
     # Test normal reduction
     person = Person(anger=100)
-    person.reduce_anger(30)
+    person.modify_anger(-30)
     assert person.anger == 70
     
     # Test reduction below zero (should floor at 0)
     person = Person(anger=50)
-    person.reduce_anger(100)
+    person.modify_anger(-100)
     assert person.anger == 0
     
     # Test reduction with decimal values (should round)
     person = Person(anger=100)
-    person.reduce_anger(30.7)
-    assert person.anger == 69  # 100 - 30.7 = 69.3, should round to 69
+    person.modify_anger(30.7)
+    assert person.anger == 131  # 100 + 30.7 = 130.7, should round to 131
     
     # Test reduction with very small values
     person = Person(anger=100)
-    person.reduce_anger(0.1)
+    person.modify_anger(0.1)
     assert person.anger == 100  # Should round to 100
     
     # Test reduction with very large values
     person = Person(anger=100)
-    person.reduce_anger(1000)
-    assert person.anger == 0  # Should floor at 0 
+    person.modify_anger(-1000)
+    assert person.anger == 0  # Should floor at 0
+
+
+    # Test reduction with very large values
+    person = Person(anger=100)
+    person.modify_anger(1000)
+    assert person.anger == 1000  # Should floor at 1000

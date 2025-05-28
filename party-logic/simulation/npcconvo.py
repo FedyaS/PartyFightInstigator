@@ -107,8 +107,8 @@ class NPCConvo:
                         believed_it = believed_chance > random.random()
 
                         if believed_it:
-                            relationship.trust += TRUST_INCREASE_ON_RUMOR_BELIEF
-                            person.anger += int(rumor.harmfulness * ANGER_INCREASE_PER_RUMOR_HARM)
+                            relationship.modify_trust(TRUST_INCREASE_ON_RUMOR_BELIEF)
+                            person.modify_anger(rumor.harmfulness * ANGER_INCREASE_PER_RUMOR_HARM)
                             person.rumors.add(rumor)
 
                             # Animosity towards subjects growths if the rumor was harmful
@@ -118,19 +118,19 @@ class NPCConvo:
                             ):
                                 for subject in rumor.subjects:
                                     rel = simulation.get_relationship(person, subject)
-                                    rel.animosity += rumor.harmfulness
-                                    rel.trust -= rumor.harmfulness // 2
+                                    rel.modify_animosity(rumor.harmfulness)
+                                    rel.modify_trust(-rumor.harmfulness / 2)
 
                         else:
-                            relationship.trust -= TRUST_DECREASE_ON_RUMOR_DISBELIEF
+                            relationship.modify_trust(-TRUST_DECREASE_ON_RUMOR_DISBELIEF)
 
                         # If the rumor is about this person they get mad at the originators
                         if person in rumor.subjects:
-                            person.anger += rumor.harmfulness
+                            person.modify_anger(rumor.harmfulness)
                             for originator in rumor.originators:
                                 rel = simulation.get_relationship(person, originator)
-                                rel.animosity += rumor.harmfulness
-                                rel.trust -= rumor.harmfulness // 2
+                                rel.modify_animosity(rumor.harmfulness)
+                                rel.modify_trust(-rumor.harmfulness / 2)
 
     def spread_emotions(self, simulation: 'Simulation'):
         # Initialize dictionary to accumulate anger influences
@@ -148,7 +148,7 @@ class NPCConvo:
 
                 # Update animosity based on anger levels
                 delta_animosity = ANGER_ANIMOSITY_FACTOR * (anger1_norm * anger2_norm - ANGER_DECAY)
-                relationship.animosity = floor_ceiling_round(relationship.animosity + delta_animosity)
+                relationship.modify_animosity(delta_animosity)
 
                 # Accumulate influence on anger based on trust and anger difference
                 influence = trust_norm * (person2.anger - person1.anger)
@@ -161,7 +161,7 @@ class NPCConvo:
             if num_participants > 1:
                 avg_delta = total_delta_anger[person] / (num_participants - 1)
                 adjusted_delta = avg_delta * ANGER_ADJUSTMENT_FACTOR
-                person.anger = floor_ceiling_round(person.anger + adjusted_delta)
+                person.modify_anger(adjusted_delta)
 
     def tick(self, simulation):
         self.tick_count += 1
