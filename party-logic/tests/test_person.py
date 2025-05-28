@@ -1,5 +1,5 @@
 import pytest
-from simulation.person import Person, RANDOM_NAMES
+from simulation.person import Person, RANDOM_NAMES, MBTI
 import random
 import os
 
@@ -72,4 +72,138 @@ def test_person_pretty_print(capsys):
     assert "Person:" in captured.out
     assert "ID: test123" in captured.out
     assert "Name: TestPerson" in captured.out
-    assert "NPC: True" in captured.out 
+    assert "NPC: True" in captured.out
+
+def test_person_mbti_initialization():
+    # Test custom MBTI
+    person = Person(mbti="INTJ")
+    assert person.mbti == "INTJ"
+    
+    # Test random MBTI
+    person = Person()
+    assert person.mbti in MBTI
+
+def test_person_description():
+    description = "A mysterious person who loves to dance"
+    person = Person(description=description)
+    assert person.description == description
+    
+    # Test empty description
+    person = Person()
+    assert person.description == ""
+
+def test_person_conversation_methods():
+    person = Person()
+    mock_convo = "mock_conversation"  # In real usage this would be an NPCConvo instance
+    
+    # Test adding to conversation
+    person.add_to_convo(mock_convo)
+    assert person.active_conversation == mock_convo
+    assert person.active_conversation_ticks == 0
+    assert person.active_conversation_max_ticks > 0
+    
+    # Test removing from conversation
+    person.remove_from_convo()
+    assert person.active_conversation is None
+    assert person.active_conversation_ticks == 0
+    assert person.active_conversation_max_ticks == 0
+
+def test_person_reduce_anger():
+    person = Person(anger=100)
+    
+    # Test normal reduction
+    person.reduce_anger(30)
+    assert person.anger == 70
+    
+    # Test reduction below zero
+    person.reduce_anger(100)
+    assert person.anger == 0
+
+def test_person_pretty_print_comprehensive(capsys):
+    person = Person(
+        name="TestPerson",
+        id="test123",
+        mbti="INTJ",
+        description="A test description",
+        is_npc=False,
+        anger=100,
+        gullibility=200,
+        convo_stay=300,
+        gossip_level=400
+    )
+
+    class Filler:
+        def __init__(self, id):
+            self.id = id
+
+    # Add some secrets and rumors
+    person.secrets = [Filler("secret1"), Filler("secret2")]
+    person.rumors = [Filler("rumor1"), Filler("rumor2")]
+    
+    person.pretty_print()
+    captured = capsys.readouterr()
+    output = captured.out
+    
+    # Test all fields are present in output
+    assert "Person:" in output
+    assert "ID: test123" in output
+    assert "Name: TestPerson" in output
+    assert "NPC: False" in output
+    assert "MBTI: INTJ" in output
+    assert "Description: A test description" in output
+    assert "Anger: 100" in output
+    assert "Gullibility: 200" in output
+    assert "Convo Stay: 300" in output
+    assert "Gossip Level: 400" in output
+    assert "Secrets IDs: ['secret1', 'secret2']" in output
+    assert "Rumors IDs: ['rumor1', 'rumor2']" in output
+
+def test_person_random_name_selection():
+    # Test multiple random name selections
+    names = set()
+    for _ in range(100):  # Generate 100 random names
+        person = Person()
+        names.add(person.name)
+    
+    # Verify that we get different names and they're all valid
+    assert len(names) > 1  # Should get at least 2 different names
+    assert all(name in RANDOM_NAMES for name in names)
+
+def test_person_is_npc_flag():
+    # Test NPC flag
+    person = Person(is_npc=True)
+    assert person.is_npc is True
+    
+    # Test non-NPC flag
+    person = Person(is_npc=False)
+    assert person.is_npc is False
+    
+    # Test default value
+    person = Person()
+    assert person.is_npc is True 
+
+def test_person_reduce_anger_with_floor_ceiling():
+    # Test normal reduction
+    person = Person(anger=100)
+    person.reduce_anger(30)
+    assert person.anger == 70
+    
+    # Test reduction below zero (should floor at 0)
+    person = Person(anger=50)
+    person.reduce_anger(100)
+    assert person.anger == 0
+    
+    # Test reduction with decimal values (should round)
+    person = Person(anger=100)
+    person.reduce_anger(30.7)
+    assert person.anger == 69  # 100 - 30.7 = 69.3, should round to 69
+    
+    # Test reduction with very small values
+    person = Person(anger=100)
+    person.reduce_anger(0.1)
+    assert person.anger == 100  # Should round to 100
+    
+    # Test reduction with very large values
+    person = Person(anger=100)
+    person.reduce_anger(1000)
+    assert person.anger == 0  # Should floor at 0 

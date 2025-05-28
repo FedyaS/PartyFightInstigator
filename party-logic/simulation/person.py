@@ -2,7 +2,7 @@ import random
 from typing import TYPE_CHECKING, Set, List
 
 from simulation.rumor import Rumor
-from simulation.utils import create_id, apply_random_modifier, load_json
+from simulation.utils import create_id, apply_random_modifier, load_json, floor_ceiling_round
 from simulation.npcsecret import NPCSecret
 
 if TYPE_CHECKING:
@@ -82,12 +82,12 @@ class Person:
             "Gullibility": self.gullibility,
             "Convo Stay": self.convo_stay,
             "Gossip Level": self.gossip_level,
-            "Secrets": [s.id for s in self.secrets] if self.secrets else "None",
-            "Rumor IDs": [r.id for r in self.rumors] if self.rumors else "None"
+            "Secrets IDs": [s.id for s in self.secrets] if self.secrets else "None",
+            "Rumors IDs": [r.id for r in self.rumors] if self.rumors else "None"
         }
         print("Person:")
         for key, value in attrs.items():
             print(f"{' ' * indent}{key}: {value}")
 
     def reduce_anger(self, a):
-        self.anger -= a
+        self.anger = floor_ceiling_round(self.anger - a)
