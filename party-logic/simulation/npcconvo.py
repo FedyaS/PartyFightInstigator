@@ -74,12 +74,16 @@ class NPCConvo:
 
                 personal_rumor_scores.append((rumor, score))
 
-            chosen_rumor, score = random.choices(
-                personal_rumor_scores,
-                weights=[score for _, score in personal_rumor_scores],
-                k=1
-            )[0]
-            spreadable_rumors.append((person, chosen_rumor, score))
+            if personal_rumor_scores:  # Only try to choose if there are rumors
+                chosen_rumor, score = random.choices(
+                    personal_rumor_scores,
+                    weights=[score for _, score in personal_rumor_scores],
+                    k=1
+                )[0]
+                spreadable_rumors.append((person, chosen_rumor, score))
+
+        if not spreadable_rumors:  # If no one has rumors to spread
+            return None, None, 0
 
         person, rumor, score = random.choices(
             spreadable_rumors,
@@ -90,31 +94,33 @@ class NPCConvo:
         return person, rumor, score
 
     def spread_rumor(self, simulation: 'Simulation'):
-        if RUMOR_SPREAD_CHANCE / MAX_VAL < random.random() :
+        if  RUMOR_SPREAD_CHANCE / MAX_VAL > random.random():
             spreader, rumor, score = self.choose_rumor_to_spread(simulation)
-            for person in self.participants:
-                if person != spreader:
-                    relationship = simulation.get_relationship(spreader, person)
-                    believed_chance = RUMOR_BELIEVABILITY * (
-                            person.gullibility / MAX_VAL *
-                            relationship.trust / MAX_VAL *
-                            rumor.plausibility / MAX_VAL)
-                    believed_it = believed_chance > random.random()
+            if spreader and rumor:
+                for person in self.participants:
+                    if person != spreader:
+                        relationship = simulation.get_relationship(spreader, person)
+                        believed_chance = RUMOR_BELIEVABILITY * (
+                                person.gullibility / MAX_VAL *
+                                relationship.trust / MAX_VAL *
+                                rumor.plausibility / MAX_VAL)
+                        believed_it = believed_chance > random.random()
 
-                    if believed_it:
-                        relationship.trust += TRUST_INCREASE_ON_RUMOR_BELIEF
-                        person.anger += int(rumor.harmfulness * ANGER_INCREASE_PER_RUMOR_HARM)
+                        if believed_it:
+                            relationship.trust += TRUST_INCREASE_ON_RUMOR_BELIEF
+                            person.anger += int(rumor.harmfulness * ANGER_INCREASE_PER_RUMOR_HARM)
+                            person.rumors.add(rumor)
 
-                    else:
-                        relationship.trust -= TRUST_DECREASE_ON_RUMOR_DISBELIEF
+                        else:
+                            relationship.trust -= TRUST_DECREASE_ON_RUMOR_DISBELIEF
 
-                    # If the rumor is about this person they get mad at the originators
-                    if person in rumor.subjects:
-                        person.anger += rumor.harmfulness
-                        for originator in rumor.originators:
-                            rel = simulation.get_relationship(person, originator)
-                            rel.animosity += rumor.harmfulness
-                            rel.trust -= rumor.harmfulness // 2
+                        # If the rumor is about this person they get mad at the originators
+                        if person in rumor.subjects:
+                            person.anger += rumor.harmfulness
+                            for originator in rumor.originators:
+                                rel = simulation.get_relationship(person, originator)
+                                rel.animosity += rumor.harmfulness
+                                rel.trust -= rumor.harmfulness // 2
 
     def spread_emotions(self, simulation: 'Simulation'):
         # Initialize dictionary to accumulate anger influences
