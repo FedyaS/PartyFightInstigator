@@ -54,6 +54,9 @@ class Simulation:
 
     def initialize_conversations(self):
         initial_convos = random.randint(self.min_convos, self.max_convos)
+
+        if initial_convos < 1:
+            return
         min_participants = 1
         max_participants = len(self.people) // self.max_convos + 1
         available_people = list(self.people.values())
