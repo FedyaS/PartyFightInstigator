@@ -71,6 +71,10 @@ class Simulation:
                 self.conversations[conv.id] = conv
                 available_people = [p for p in available_people if p.active_conversation is None]
 
+    def get_relationship(self, p1: Person, p2: Person):
+        key_id = get_cross_id(p1.id, p2.id)
+        return self.relationships[key_id]
+
     def lucky_end_conversation(self):
         # End a Convo
         chance_will_end = CHANCE_TO_END_CONVO_PER_TICK / MAX_VAL
@@ -106,13 +110,13 @@ class Simulation:
             if person.active_conversation:
                 if (
                         person.active_conversation_ticks > person.active_conversation_max_ticks and
-                        REMOVE_PERSON_FROM_CONVO_CHANCE / 1000 > random.random()
+                        REMOVE_PERSON_FROM_CONVO_CHANCE / MAX_VAL > random.random()
                 ):
                     conv: NPCConvo = person.active_conversation
                     conv.remove_person(person)
 
             else:
-                if ADD_PERSON_TO_CONVO_CHANCE / 1000 > random.random():
+                if ADD_PERSON_TO_CONVO_CHANCE / MAX_VAL > random.random():
                     conv_to_add_to: NPCConvo = random.choice(list(self.conversations.values()))
                     conv_to_add_to.add_person(person)
 
@@ -137,7 +141,7 @@ class Simulation:
 
         # Progress Conversations
         for c in self.conversations.values():
-            c.tick()
+            c.tick(self)
 
         # Check for Fights
         for r in self.relationships.values():

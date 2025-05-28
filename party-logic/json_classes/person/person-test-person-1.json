@@ -7,6 +7,6 @@
     "anger": 100,
     "gullibility": 500,
     "convo_stay": 500,
-    "secret_ids": ["test-npcsecret-1"],
-    "rumor_ids": ["test-rumor-1"]
+    "gossip_level": 500,
+    "secret_ids": ["test-npcsecret-1"]
 } 

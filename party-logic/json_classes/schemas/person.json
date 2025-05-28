@@ -53,13 +53,6 @@
       "items": {
         "type": "string"
       }
-    },
-    "rumor_ids": {
-      "type": "array",
-      "description": "List of rumor IDs associated with this person",
-      "items": {
-        "type": "string"
-      }
     }
   }
 } 

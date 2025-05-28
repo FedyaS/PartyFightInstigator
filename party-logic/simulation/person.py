@@ -18,7 +18,7 @@ MBTI = [
 
 class Person:
     def __init__(self, id=None, name=None, mbti=None, description='', is_npc=True,
-                 anger=0, gullibility=500, convo_stay=500, randomize_stats=0,
+                 anger=0, gullibility=500, convo_stay=500, gossip_level=500, randomize_stats=0,
                  secrets=None, rumors=None, from_json=''):
         data = load_json(from_json, 'person')
         if data:
@@ -31,6 +31,7 @@ class Person:
             self.anger = data['anger']
             self.gullibility = data['gullibility']
             self.convo_stay = data['convo_stay']
+            self.gossip_level = data['gossip_level']
 
             self.secrets = [NPCSecret(from_json=f"npcsecret-{sid}.json") for sid in data['secret_ids']]
             self.rumors = set() # No loading rumors from json for now
@@ -53,6 +54,7 @@ class Person:
             self.anger = apply_random_modifier(anger, randomize_stats)
             self.gullibility = apply_random_modifier(gullibility, randomize_stats)
             self.convo_stay = apply_random_modifier(convo_stay, randomize_stats)
+            self.gossip_level = apply_random_modifier(gossip_level, randomize_stats)
 
         self.active_conversation: 'NPCConvo' = None
         self.active_conversation_ticks = 0
@@ -79,6 +81,7 @@ class Person:
             "Anger": self.anger,
             "Gullibility": self.gullibility,
             "Convo Stay": self.convo_stay,
+            "Gossip Level": self.gossip_level,
             "Secrets": [s.id for s in self.secrets] if self.secrets else "None",
             "Rumor IDs": [r.id for r in self.rumors] if self.rumors else "None"
         }

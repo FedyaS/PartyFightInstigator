@@ -34,17 +34,21 @@ def test_person_initialization_with_stats():
     anger = 100
     gullibility = 200
     convo_stay = 300
-    person = Person(anger=anger, gullibility=gullibility, convo_stay=convo_stay)
+    gossip_level = 400
+    person = Person(anger=anger, gullibility=gullibility, convo_stay=convo_stay, gossip_level=gossip_level)
     assert person.anger == anger
     assert person.gullibility == gullibility
     assert person.convo_stay == convo_stay
+    assert person.gossip_level == gossip_level
 
 def test_person_initialization_with_randomize_stats():
     base_anger = 100
+    base_gossip = 500
     randomize_stats = 50
-    person = Person(anger=base_anger, randomize_stats=randomize_stats)
+    person = Person(anger=base_anger, gossip_level=base_gossip, randomize_stats=randomize_stats)
     # The actual value will be within base_anger ± randomize_stats
     assert base_anger - randomize_stats <= person.anger <= base_anger + randomize_stats
+    assert base_gossip - randomize_stats <= person.gossip_level <= base_gossip + randomize_stats
 
 def test_person_from_json():
     person = Person(from_json="person-test-person-1.json")
@@ -56,6 +60,7 @@ def test_person_from_json():
     assert person.anger == 100
     assert person.gullibility == 500
     assert person.convo_stay == 500
+    assert person.gossip_level == 500
     assert len(person.secrets) == 1
     assert person.secrets[0].id == 'test-secret-1'
     assert person.rumors == set()

@@ -7,6 +7,6 @@
   "anger": 200,
   "gullibility": 150,
   "convo_stay": 400,
-  "secret_ids": ["AAAAAABB", "AAAAAACC"],
-  "rumor_ids": []
+  "gossip_level": 250,
+  "secret_ids": ["AAAAAABB", "AAAAAACC"]
 } 
