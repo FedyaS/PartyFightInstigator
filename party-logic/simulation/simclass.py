@@ -102,7 +102,13 @@ class Simulation:
             min_participants = 1
             max_participants = len(available_people) // self.max_convos + 1
             num_participants = random.randint(min_participants, max_participants)
-            participants = random.sample(available_people, num_participants)
+
+            if len(available_people) >= num_participants:
+                participants = random.sample(available_people, num_participants)
+            elif available_people:
+                participants = available_people
+            else:
+                participants = []
 
             if len(participants) >= min_participants:
                 conv = NPCConvo(participants)
