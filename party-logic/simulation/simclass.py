@@ -67,7 +67,11 @@ class Simulation:
                 break
 
             num_participants = random.randint(min_participants, max_participants)
-            participants = random.sample(available_people, num_participants)
+
+            if num_participants >= len(available_people):
+                participants = random.sample(available_people, num_participants)
+            else:
+                participants = available_people
 
             if len(participants) >= min_participants:
                 conv = NPCConvo(participants)
