@@ -3,7 +3,7 @@ from typing import List, TYPE_CHECKING
 
 from simulation.settings import TICKS_PER_CONVO_TICK, RUMOR_SPREAD_CHANCE, MAX_VAL, RUMOR_BELIEVABILITY, \
     TRUST_DECREASE_ON_RUMOR_DISBELIEF, TRUST_INCREASE_ON_RUMOR_BELIEF, ANGER_INCREASE_PER_RUMOR_HARM, \
-    ANGER_ANIMOSITY_FACTOR, ANGER_DECAY, ANGER_ADJUSTMENT_FACTOR
+    ANGER_ANIMOSITY_FACTOR, ANGER_DECAY, ANGER_ADJUSTMENT_FACTOR, MIN_RUMOR_HARMFULNESS_TO_GROW_ANIMOSITY
 from simulation.utils import create_id, apply_random_modifier, floor_ceiling_round
 
 if TYPE_CHECKING:
@@ -106,11 +106,20 @@ class NPCConvo:
                                 rumor.plausibility / MAX_VAL)
                         believed_it = believed_chance > random.random()
 
-                        print("hitting here")
                         if believed_it:
                             relationship.trust += TRUST_INCREASE_ON_RUMOR_BELIEF
                             person.anger += int(rumor.harmfulness * ANGER_INCREASE_PER_RUMOR_HARM)
                             person.rumors.add(rumor)
+
+                            # Animosity towards subjects growths if the rumor was harmful
+                            if (
+                                    person not in rumor.subjects and
+                                    rumor.harmfulness > MIN_RUMOR_HARMFULNESS_TO_GROW_ANIMOSITY
+                            ):
+                                for subject in rumor.subjects:
+                                    rel = simulation.get_relationship(person, subject)
+                                    rel.animosity += rumor.harmfulness
+                                    rel.trust -= rumor.harmfulness // 2
 
                         else:
                             relationship.trust -= TRUST_DECREASE_ON_RUMOR_DISBELIEF
