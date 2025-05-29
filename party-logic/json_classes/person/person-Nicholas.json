@@ -1,0 +1,12 @@
+{
+  "id": "Nicholas",
+  "name": "Nicholas Gente",
+  "mbti": "ENFJ",
+  "description": "A sleezy Italian realtor who does shady mafia house deals sometimes. Very charismatic and manipulative. Tells people what they want to hear to make himself seem like a good guy.",
+  "is_npc": true,
+  "anger": 150,
+  "gullibility": 200,
+  "convo_stay": 300,
+  "gossip_level": 700,
+  "secret_ids": ["Nicholas1", "Nicholas2"]
+}

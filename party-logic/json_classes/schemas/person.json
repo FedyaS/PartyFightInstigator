@@ -41,6 +41,12 @@
       "minimum": 0,
       "maximum": 1000
     },
+    "gossip_level": {
+      "type": "number",
+      "description": "How much this person gossips... how likely they are to spread rumors and how likely they are to share secrets.",
+      "minimum": 0,
+      "maximum": 1000
+    },
     "convo_stay": {
       "type": "number",
       "description": "How long the person typically stays in conversations",
