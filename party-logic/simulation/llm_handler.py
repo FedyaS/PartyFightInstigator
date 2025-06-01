@@ -125,7 +125,10 @@ Instructions for response:
 3. If the player is inviting and friendly, and your trust in them is high while animosity is low, you may be more inclined to share a secret with a lower conceal_score.
 4. If you detect the player is telling you a new rumor: assess its plausibility and harmfulness. Decide if you believe it. Your belief in a new rumor should positively influence your trust change towards the player; disbelief should negatively influence it. If a rumor is detected, include its details in the structured output.
 5. Generate a response that is concise, in character, and try to make it funny and human-sounding.
-6. Provide your response in the specified structure.
+6. Return how much the trust changes (from -1000 to 1000) - trust_change
+7. Return how much the animosity changes (from -1000 to 1000) - animosity_change
+8. Return how much the anger level of the NPC changes (from -1000 to 1000) - anger_change
+9. Provide your response in the specified structure.
 """
     
     user_prompt_content = player_utterance
