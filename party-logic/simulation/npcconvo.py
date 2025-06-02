@@ -50,6 +50,8 @@ class NPCConvo:
             personal_rumor_scores = []  # [(Rumor, Score)]
 
             for rumor in person.rumors:
+                if person in rumor.subjects:
+                    continue
                 # Base score from gossip level and rumor plausibility
                 score = person.gossip_level * rumor.plausibility
 
