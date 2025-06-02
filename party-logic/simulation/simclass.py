@@ -98,7 +98,7 @@ class Simulation:
         chance_will_start = CHANCE_TO_START_CONVO_PER_TICK / MAX_VAL
         if (
                 len(self.conversations) < self.max_convos and
-                random.random() > chance_will_start
+                random.random() < chance_will_start
         ):
 
             available_people = list(self.people.values())
@@ -123,13 +123,13 @@ class Simulation:
             if person.active_conversation:
                 if (
                         person.active_conversation_ticks > person.active_conversation_max_ticks and
-                        REMOVE_PERSON_FROM_CONVO_CHANCE / MAX_VAL > random.random()
+                        random.random() < REMOVE_PERSON_FROM_CONVO_CHANCE / MAX_VAL
                 ):
                     conv: NPCConvo = person.active_conversation
                     conv.remove_person(person)
 
             else:
-                if ADD_PERSON_TO_CONVO_CHANCE / MAX_VAL > random.random():
+                if random.random() < ADD_PERSON_TO_CONVO_CHANCE / MAX_VAL:
                     conv_to_add_to: NPCConvo = random.choice(list(self.conversations.values()))
                     conv_to_add_to.add_person(person)
 

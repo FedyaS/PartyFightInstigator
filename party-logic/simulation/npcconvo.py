@@ -1,5 +1,5 @@
 import random
-from typing import List, TYPE_CHECKING
+from typing import List, TYPE_CHECKING, Tuple
 
 from simulation.settings import TICKS_PER_CONVO_TICK, RUMOR_SPREAD_CHANCE, MAX_VAL, RUMOR_BELIEVABILITY, \
     TRUST_DECREASE_ON_RUMOR_DISBELIEF, TRUST_INCREASE_ON_RUMOR_BELIEF, ANGER_INCREASE_PER_RUMOR_HARM, \
@@ -9,6 +9,7 @@ from simulation.utils import create_id, apply_random_modifier, floor_ceiling_rou
 if TYPE_CHECKING:
     from simulation.simclass import Simulation
     from simulation.person import Person
+    from simulation.rumor import Rumor
 
 class NPCConvo:
     def __init__(self, participants: List['Person'], id: str=None, max_tick_count=1000, randomize_stats=0):
@@ -42,47 +43,70 @@ class NPCConvo:
             person.remove_from_convo()
         self.participants = []
 
+    def get_average_trust(self, person: 'Person', simulation: 'Simulation'):
+        avg_trust = 500
+        count = 1
+        for other in self.participants:
+            if other != person:
+                rel = simulation.get_relationship(person, other)
+                avg_trust += rel.trust if rel else 500
+                count += 1
+        avg_trust /= count
+        return avg_trust
+
+    def get_animosity_towards_subjects(self, person: 'Person', rumor: 'Rumor', simulation: 'Simulation'):
+        total_animosity = 0
+        for s in rumor.subjects:
+            if person != s:
+                rel = simulation.get_relationship(person, s)
+                total_animosity += rel.animosity
+        return total_animosity
+
+    def get_rumor_known_score(self, rumor: 'Rumor'):
+        all_people = len(self.participants)
+
+        if all_people == 0:
+            return 0
+
+        knowing_people = -1
+        for p in self.participants:
+            if rumor in p.rumors:
+                knowing_people += 1
+
+        return 1000 * (1 - knowing_people/all_people)
+
+    def calculate_person_rumor_spread_score(self, person: 'Person', rumor: 'Rumor', simulation: 'Simulation',
+                                            average_trust: int):
+        # People don't spread rumors about themselves
+        if person in rumor.subjects:
+            return 0
+
+        fac1 = person.gossip_level
+        fac2 = rumor.plausibility
+        fac3 = average_trust
+        fac4 = 1000 - (abs(person.anger - rumor.harmfulness))
+        fac5 = 1000 if rumor.is_really_true else 0
+        fac6 = self.get_animosity_towards_subjects(person, rumor, simulation)
+        fac7 = self.get_rumor_known_score(rumor)
+
+        return fac1 + fac2 + fac3 + fac4 + fac5 + fac6 + fac7
+
+    def score_personal_rumors(self, person: 'Person', simulation: 'Simulation') -> List[Tuple['Person', 'Rumor', int]]:
+        personal_rumor_scores = []
+        average_trust = self.get_average_trust(person, simulation)
+
+        for rumor in person.rumors:
+            score = self.calculate_person_rumor_spread_score(person, rumor, simulation, average_trust)
+            if score > 0:
+                personal_rumor_scores.append((person, rumor, score))
+
+        return personal_rumor_scores
+
     def choose_rumor_to_spread(self, simulation: 'Simulation'):
         spreadable_rumors = []  # [(Person, Rumor, Score)]
 
-        # First, choose the rumor each person is going to spread and how likely they are to spread it
         for person in self.participants:
-            personal_rumor_scores = []  # [(Rumor, Score)]
-
-            for rumor in person.rumors:
-                if person in rumor.subjects:
-                    continue
-                # Base score from gossip level and rumor plausibility
-                score = person.gossip_level * rumor.plausibility
-
-                # Adjust for trust with others in conversation
-                avg_trust = 0
-                count = 0
-                for other in self.participants:
-                    if other != person:
-                        rel = simulation.get_relationship(person, other)
-                        avg_trust += rel.trust if rel else 500
-                        count += 1
-                if count > 0:
-                    avg_trust /= count
-                    score *= (avg_trust / MAX_VAL)
-
-                # Adjust for anger and rumor harmfulness
-                anger_factor = person.anger / MAX_VAL
-                harm_factor = rumor.harmfulness / MAX_VAL
-                # Angry people spread harmful rumors; calm people spread less harmful ones
-                anger_match = 1 + abs(anger_factor - harm_factor)
-                score /= anger_match  # Closer anger-harm match increases likelihood
-
-                personal_rumor_scores.append((rumor, score))
-
-            if personal_rumor_scores:  # Only try to choose if there are rumors
-                chosen_rumor, score = random.choices(
-                    personal_rumor_scores,
-                    weights=[score for _, score in personal_rumor_scores],
-                    k=1
-                )[0]
-                spreadable_rumors.append((person, chosen_rumor, score))
+            spreadable_rumors += self.score_personal_rumors(person, simulation)
 
         if not spreadable_rumors:  # If no one has rumors to spread
             return None, None, 0
@@ -95,20 +119,34 @@ class NPCConvo:
 
         return person, rumor, score
 
+    def check_if_believed_rumor(self, person, rumor, relationship):
+        believed_chance = RUMOR_BELIEVABILITY * (
+                person.gullibility / MAX_VAL *
+                relationship.trust / MAX_VAL *
+                rumor.plausibility / MAX_VAL)
+        believed_it = random.random() < believed_chance
+        return believed_it
+
     def spread_rumor(self, simulation: 'Simulation'):
-        if RUMOR_SPREAD_CHANCE / MAX_VAL > random.random():
+        if random.random() < RUMOR_SPREAD_CHANCE / MAX_VAL:
             spreader, rumor, score = self.choose_rumor_to_spread(simulation)
             if spreader and rumor:
                 for person in self.participants:
                     if person != spreader:
                         relationship = simulation.get_relationship(spreader, person)
-                        believed_chance = RUMOR_BELIEVABILITY * (
-                                person.gullibility / MAX_VAL *
-                                relationship.trust / MAX_VAL *
-                                rumor.plausibility / MAX_VAL)
-                        believed_it = believed_chance > random.random()
+                        rumor_is_about_this_person = person in rumor.subjects
+                        believed_it = self.check_if_believed_rumor(spreader, person, rumor, relationship)
 
-                        if believed_it:
+                        if rumor_is_about_this_person:
+                            person.modify_anger(rumor.harmfulness)
+                            relationship.modify_animosity(rumor.harmfulness)
+                            relationship.modify_trust(-rumor.harmfulness / 2)
+                            for originator in rumor.originators:
+                                rel = simulation.get_relationship(person, originator)
+                                rel.modify_animosity(rumor.harmfulness)
+                                rel.modify_trust(-rumor.harmfulness / 2)
+
+                        elif believed_it:
                             relationship.modify_trust(TRUST_INCREASE_ON_RUMOR_BELIEF)
                             person.modify_anger(rumor.harmfulness * ANGER_INCREASE_PER_RUMOR_HARM)
                             person.rumors.add(rumor)
@@ -123,16 +161,8 @@ class NPCConvo:
                                     rel.modify_animosity(rumor.harmfulness)
                                     rel.modify_trust(-rumor.harmfulness / 2)
 
-                        else:
+                        elif not believed_it:
                             relationship.modify_trust(-TRUST_DECREASE_ON_RUMOR_DISBELIEF)
-
-                        # If the rumor is about this person they get mad at the originators
-                        if person in rumor.subjects:
-                            person.modify_anger(rumor.harmfulness)
-                            for originator in rumor.originators:
-                                rel = simulation.get_relationship(person, originator)
-                                rel.modify_animosity(rumor.harmfulness)
-                                rel.modify_trust(-rumor.harmfulness / 2)
 
     def spread_emotions(self, simulation: 'Simulation'):
         # Initialize dictionary to accumulate anger influences

@@ -3,7 +3,6 @@ from typing import TYPE_CHECKING, Set, List
 
 from simulation.rumor import Rumor
 from simulation.utils import create_id, apply_random_modifier, load_json, floor_ceiling_round
-from simulation.npcsecret import NPCSecret
 
 if TYPE_CHECKING:
     from simulation.npcconvo import NPCConvo
@@ -19,7 +18,7 @@ MBTI = [
 class Person:
     def __init__(self, id=None, name=None, mbti=None, description='', is_npc=True,
                  anger=0, gullibility=500, convo_stay=500, gossip_level=500, randomize_stats=0,
-                 secrets=None, rumors=None, from_json=''):
+                 rumors=None, from_json=''):
         data = load_json(from_json, 'person')
         if data:
             self.id = data['id']
@@ -33,14 +32,9 @@ class Person:
             self.convo_stay = data['convo_stay']
             self.gossip_level = data['gossip_level']
 
-            self.secrets = [NPCSecret(from_json=f"npcsecret-{sid}.json") for sid in data['secret_ids']]
             self.rumors = set() # No loading rumors from json for now
 
         else:
-            if secrets is None:
-                secrets = []
-            self.secrets = secrets
-
             if rumors is None:
                 rumors = []
             self.rumors = set(rumors)
@@ -82,7 +76,6 @@ class Person:
             "Gullibility": self.gullibility,
             "Convo Stay": self.convo_stay,
             "Gossip Level": self.gossip_level,
-            "Secrets IDs": [s.id for s in self.secrets] if self.secrets else "None",
             "Rumors IDs": [r.id for r in self.rumors] if self.rumors else "None"
         }
         print("Person:")
