@@ -135,7 +135,7 @@ class NPCConvo:
                     if person != spreader:
                         relationship = simulation.get_relationship(spreader, person)
                         rumor_is_about_this_person = person in rumor.subjects
-                        believed_it = self.check_if_believed_rumor(spreader, person, rumor, relationship)
+                        believed_it = self.check_if_believed_rumor(person, rumor, relationship)
 
                         if rumor_is_about_this_person:
                             person.modify_anger(rumor.harmfulness)

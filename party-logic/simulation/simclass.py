@@ -78,9 +78,17 @@ class Simulation:
                 self.conversations[conv.id] = conv
                 available_people = [p for p in available_people if p.active_conversation is None]
 
+    def safe_get_person(self, id):
+        if id in self.people.keys():
+            return self.people[id]
+        return None
+
     def get_relationship(self, p1: Person, p2: Person):
         key_id = get_cross_id(p1.id, p2.id)
         return self.relationships[key_id]
+
+    def get_all_relationships_for_person(self, person: Person) -> list[Relationship]:
+        return [rel for rel in self.relationships.values() if person in (rel.person1, rel.person2)]
 
     def lucky_end_conversation(self):
         # End a Convo
