@@ -1,0 +1,14 @@
+{
+    "id": "houseparty",
+    "min_convos": 1,
+    "max_convos": 2,
+    "person_ids": ["Nicholas", "test-person-2"],
+    "relationships": [
+        {
+            "person1_id":  "test-person-1",
+            "person2_id":  "test-person-2",
+            "trust": 222,
+            "animosity": 333
+        }
+    ]
+}

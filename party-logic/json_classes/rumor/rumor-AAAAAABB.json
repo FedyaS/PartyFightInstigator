@@ -1,0 +1,9 @@
+{
+  "id": "AAAAAABB",
+  "is_really_true": true,
+  "text": "Person has been secretly developing a revolutionary evil AI algorithm that could take over the world, but they're keeping it hidden until it's perfect.",
+  "hash_text": "",
+  "plausibility": 300,
+  "harmfulness": 900,
+  "self_conceal_score": 850
+} 

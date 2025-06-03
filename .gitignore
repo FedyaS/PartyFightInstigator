@@ -183,3 +183,8 @@ cython_debug/
 /node_modules
 /.env
 /dist
+
+# Logs
+llm_calls.jsonl
+w.json
+resp.txt

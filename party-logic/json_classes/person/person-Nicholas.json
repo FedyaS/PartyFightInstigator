@@ -7,6 +7,6 @@
   "anger": 150,
   "gullibility": 200,
   "convo_stay": 300,
-  "gossip_level": 700,
-  "secret_ids": ["Nicholas1", "Nicholas2"]
+  "gossip_level": 1000,
+  "rumor_ids": ["Nicholas1", "Nicholas2"]
 }

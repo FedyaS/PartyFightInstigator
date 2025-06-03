@@ -32,7 +32,15 @@ class Person:
             self.convo_stay = data['convo_stay']
             self.gossip_level = data['gossip_level']
 
-            self.rumors = set() # No loading rumors from json for now
+            # Load rumors from JSON
+            self.rumors = set()
+            rumor_ids = data.get('rumor_ids', [])
+            for rumor_id in rumor_ids:
+                try:
+                    rumor = Rumor(from_json=f"rumor-{rumor_id}.json", subjects=[self])
+                    self.rumors.add(rumor)
+                except FileNotFoundError:
+                    print(f"Warning: Rumor file not found for ID {rumor_id}")
 
         else:
             if rumors is None:

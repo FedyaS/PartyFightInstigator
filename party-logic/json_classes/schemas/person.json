@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
-  "required": ["id", "name", "mbti", "description", "is_npc", "anger", "gullibility", "convo_stay", "secret_ids", "rumor_ids"],
+  "required": ["id", "name", "mbti", "description", "is_npc", "anger", "gullibility", "convo_stay", "rumor_ids"],
   "properties": {
     "id": {
       "type": "string",
@@ -53,9 +53,9 @@
       "minimum": 0,
       "maximum": 1000
     },
-    "secret_ids": {
+    "rumor_ids": {
       "type": "array",
-      "description": "List of secret IDs associated with this person",
+      "description": "List of rumor IDs associated with this person",
       "items": {
         "type": "string"
       }

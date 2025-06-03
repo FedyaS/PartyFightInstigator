@@ -8,5 +8,5 @@
   "gullibility": 400,
   "convo_stay": 800,
   "gossip_level": 800,
-  "secret_ids": ["BBBBBBAA"]
+  "rumor_ids": ["BBBBBBAA"]
 } 

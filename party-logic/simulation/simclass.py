@@ -8,7 +8,6 @@ from simulation.utils import create_id, load_json, get_cross_id
 from simulation.person import Person
 from simulation.relationships import Relationship
 from simulation.npcconvo import NPCConvo
-from simulation.npcsecret import NPCSecret
 from simulation.rumor import Rumor
 
 from simulation.settings import *
