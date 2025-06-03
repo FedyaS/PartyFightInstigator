@@ -9,6 +9,7 @@ from simulation.person import Person
 from simulation.relationships import Relationship
 from simulation.npcconvo import NPCConvo
 from simulation.rumor import Rumor
+from simulation.player_convo import PlayerConvo
 
 from simulation.settings import *
 
@@ -42,6 +43,10 @@ class Simulation:
         self.conversations = {}
         self.initialize_conversations()
         self.rumors = {}
+        
+        # Initialize player conversations with each NPC
+        self.player_conversations = {}
+        self.initialize_player_conversations()
 
     def initialize_missing_relationships(self):
         for p1 in self.people.values():
@@ -76,6 +81,22 @@ class Simulation:
                 conv = NPCConvo(participants)
                 self.conversations[conv.id] = conv
                 available_people = [p for p in available_people if p.active_conversation is None]
+
+    def initialize_player_conversations(self):
+        """Initialize a PlayerConvo for each person in the simulation"""
+        for person in self.people.values():
+            self.player_conversations[person.id] = PlayerConvo(person)
+
+    def get_player_conversation(self, person_id: str):
+        """Get the PlayerConvo for a specific person"""
+        return self.player_conversations.get(person_id)
+
+    def talk_to_player(self, person_id: str, player_text: str):
+        """Handle player talking to a specific NPC"""
+        player_convo = self.get_player_conversation(person_id)
+        if player_convo:
+            return player_convo.talk(player_text, self)
+        return None
 
     def safe_get_person(self, id):
         if id in self.people.keys():
