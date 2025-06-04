@@ -52,7 +52,7 @@ class PlayerConvo:
                 rumor.plausibility / MAX_VAL)
         believed_it = random.random() < believed_chance
         rumor_is_about_this_person = self.npc in rumor.subjects
-
+        self.npc.rumors.add(rumor)
         if rumor_is_about_this_person:
             self.npc.modify_anger(rumor.harmfulness)
             # self.change_animosity(rumor.harmfulness)
@@ -65,7 +65,6 @@ class PlayerConvo:
         elif believed_it:
             self.change_trust(TRUST_INCREASE_ON_RUMOR_BELIEF)
             self.npc.modify_anger(rumor.harmfulness * ANGER_INCREASE_PER_RUMOR_HARM)
-            self.npc.rumors.add(rumor)
 
             # Animosity towards subjects growths if the rumor was harmful
             if (
