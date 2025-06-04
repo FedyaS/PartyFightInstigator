@@ -52,7 +52,7 @@ class SimulationGUI:
     def __init__(self, master):
         self.master = master
         self.master.title("Party Fight Instigator - Simulation")
-        self.master.geometry("1200x800")
+        self.master.geometry("1400x900")
         self.master.configure(bg="#2b2b2b")
         
         # Create simulation
@@ -73,12 +73,32 @@ class SimulationGUI:
         main_frame = ttk.Frame(self.master)
         main_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
         
-        # Left panel - NPCs and controls
+        # Create main horizontal layout with three sections
         left_frame = ttk.Frame(main_frame)
         left_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(0, 5))
         
+        center_frame = ttk.Frame(main_frame)
+        center_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=False, padx=5)
+        
+        right_frame = ttk.Frame(main_frame)
+        right_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=(5, 0))
+        
+        # Left panel - NPCs and controls
+        self.setup_left_panel(left_frame)
+        
+        # Center panel - Player Relationships
+        self.setup_center_panel(center_frame)
+        
+        # Right panel - Output and chat
+        self.setup_right_panel(right_frame)
+        
+        # Initial output
+        self.log_output("🎉 Simulation started!")
+        self.log_output("=" * 50)
+        
+    def setup_left_panel(self, parent):
         # Control buttons frame
-        controls_frame = ttk.Frame(left_frame)
+        controls_frame = ttk.Frame(parent)
         controls_frame.pack(fill=tk.X, pady=(0, 10))
         
         # Simulation tick button
@@ -95,7 +115,7 @@ class SimulationGUI:
         self.tick_label.pack(side=tk.LEFT)
         
         # NPCs frame
-        npcs_frame = ttk.LabelFrame(left_frame, text="NPCs", padding=10)
+        npcs_frame = ttk.LabelFrame(parent, text="NPCs", padding=10)
         npcs_frame.pack(fill=tk.BOTH, expand=True)
         
         # Create notebook for NPC tabs
@@ -106,13 +126,39 @@ class SimulationGUI:
         self.npc_frames = {}
         for person in self.sim.people.values():
             self.create_npc_tab(person)
+    
+    def setup_center_panel(self, parent):
+        # Player relationships frame
+        relationships_frame = ttk.LabelFrame(parent, text="Your Relationships", padding=10)
+        relationships_frame.pack(fill=tk.BOTH, expand=True)
+        relationships_frame.configure(width=300)
         
-        # Right panel - Output and chat
-        right_frame = ttk.Frame(main_frame)
-        right_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=(5, 0))
+        # Create a canvas and scrollbar for the relationships
+        canvas_frame = ttk.Frame(relationships_frame)
+        canvas_frame.pack(fill=tk.BOTH, expand=True)
         
+        self.rel_canvas = tk.Canvas(canvas_frame, bg="#f0f0f0", width=280)
+        rel_scrollbar = ttk.Scrollbar(canvas_frame, orient="vertical", command=self.rel_canvas.yview)
+        self.rel_scrollable_frame = ttk.Frame(self.rel_canvas)
+        
+        self.rel_scrollable_frame.bind(
+            "<Configure>",
+            lambda e: self.rel_canvas.configure(scrollregion=self.rel_canvas.bbox("all"))
+        )
+        
+        self.rel_canvas.create_window((0, 0), window=self.rel_scrollable_frame, anchor="nw")
+        self.rel_canvas.configure(yscrollcommand=rel_scrollbar.set)
+        
+        self.rel_canvas.pack(side="left", fill="both", expand=True)
+        rel_scrollbar.pack(side="right", fill="y")
+        
+        # Create relationship widgets for each NPC
+        self.relationship_widgets = {}
+        self.create_relationship_widgets()
+    
+    def setup_right_panel(self, parent):
         # Output frame
-        output_frame = ttk.LabelFrame(right_frame, text="Simulation Output", padding=10)
+        output_frame = ttk.LabelFrame(parent, text="Simulation Output", padding=10)
         output_frame.pack(fill=tk.BOTH, expand=True, pady=(0, 5))
         
         # Output text area
@@ -128,7 +174,7 @@ class SimulationGUI:
         self.output_text.pack(fill=tk.BOTH, expand=True)
         
         # Chat frame
-        chat_frame = ttk.LabelFrame(right_frame, text="Chat with NPCs", padding=10)
+        chat_frame = ttk.LabelFrame(parent, text="Chat with NPCs", padding=10)
         chat_frame.pack(fill=tk.X, pady=(5, 0))
         
         # NPC selection for chat
@@ -163,10 +209,47 @@ class SimulationGUI:
         )
         self.send_button.pack(side=tk.RIGHT)
         
-        # Initial output
-        self.log_output("🎉 Simulation started!")
-        self.log_output("=" * 50)
-        
+    def create_relationship_widgets(self):
+        """Create widgets for displaying player relationships with each NPC"""
+        for person in self.sim.people.values():
+            # Create frame for this relationship
+            rel_frame = ttk.LabelFrame(self.rel_scrollable_frame, text=person.name, padding=8)
+            rel_frame.pack(fill=tk.X, pady=5, padx=5)
+            
+            # Get player conversation data
+            player_convo = self.sim.get_player_conversation(person.id)
+            
+            # Trust label
+            trust_frame = ttk.Frame(rel_frame)
+            trust_frame.pack(fill=tk.X, pady=2)
+            trust_label = ttk.Label(trust_frame, text="🤝 Trust:", font=("Arial", 9, "bold"))
+            trust_label.pack(side=tk.LEFT)
+            trust_value = ttk.Label(trust_frame, font=("Arial", 9))
+            trust_value.pack(side=tk.RIGHT)
+            
+            # Animosity label
+            animosity_frame = ttk.Frame(rel_frame)
+            animosity_frame.pack(fill=tk.X, pady=2)
+            animosity_label = ttk.Label(animosity_frame, text="😠 Animosity:", font=("Arial", 9, "bold"))
+            animosity_label.pack(side=tk.LEFT)
+            animosity_value = ttk.Label(animosity_frame, font=("Arial", 9))
+            animosity_value.pack(side=tk.RIGHT)
+            
+            # NPC Anger label
+            anger_frame = ttk.Frame(rel_frame)
+            anger_frame.pack(fill=tk.X, pady=2)
+            anger_label = ttk.Label(anger_frame, text="🔥 Their Anger:", font=("Arial", 9, "bold"))
+            anger_label.pack(side=tk.LEFT)
+            anger_value = ttk.Label(anger_frame, font=("Arial", 9))
+            anger_value.pack(side=tk.RIGHT)
+            
+            # Store references for updating
+            self.relationship_widgets[person.id] = {
+                'trust': trust_value,
+                'animosity': animosity_value,
+                'anger': anger_value
+            }
+    
     def create_npc_tab(self, person):
         # Create tab frame
         tab_frame = ttk.Frame(self.npc_notebook)
@@ -254,6 +337,31 @@ ID: {person.id}
                     rumors_widget.insert(tk.END, f"   Plausibility: {rumor.plausibility}, Harmfulness: {rumor.harmfulness}\n\n")
             else:
                 rumors_widget.insert(tk.END, "No rumors known yet...")
+        
+        # Update player relationships
+        self.update_relationship_display()
+    
+    def update_relationship_display(self):
+        """Update the player relationship display"""
+        for person_id, widgets in self.relationship_widgets.items():
+            player_convo = self.sim.get_player_conversation(person_id)
+            person = self.sim.people[person_id]
+            
+            if player_convo:
+                # Color coding for trust levels
+                trust_color = "green" if player_convo.trust > 600 else "orange" if player_convo.trust > 300 else "red"
+                widgets['trust'].config(text=f"{player_convo.trust}/1000", foreground=trust_color)
+                
+                # Color coding for animosity levels
+                animosity_color = "red" if player_convo.animosity > 600 else "orange" if player_convo.animosity > 300 else "green"
+                widgets['animosity'].config(text=f"{player_convo.animosity}/1000", foreground=animosity_color)
+            else:
+                widgets['trust'].config(text="500/1000", foreground="black")
+                widgets['animosity'].config(text="500/1000", foreground="black")
+            
+            # Color coding for NPC anger
+            anger_color = "red" if person.anger > 600 else "orange" if person.anger > 300 else "green"
+            widgets['anger'].config(text=f"{person.anger}/1000", foreground=anger_color)
     
     def simulation_tick(self):
         """Execute one simulation tick"""
