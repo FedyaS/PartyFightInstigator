@@ -57,6 +57,7 @@ class Simulation:
                         self.relationships[new_rel.id] = new_rel
 
     def initialize_conversations(self):
+        # TODO: This doesn't actually respect min and max convos count
         initial_convos = random.randint(self.min_convos, self.max_convos)
 
         if initial_convos < 1:

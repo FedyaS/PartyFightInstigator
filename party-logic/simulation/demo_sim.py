@@ -57,7 +57,7 @@ class SimulationGUI:
         
         # Create simulation
         people = create_demo_people()
-        self.sim = Simulation(people=people, min_convos=1, max_convos=2)
+        self.sim = Simulation(people=people, min_convos=2, max_convos=2)
         
         # Add rumors to people
         rumors = create_demo_rumors(people)
@@ -113,6 +113,20 @@ class SimulationGUI:
         # Tick counter label
         self.tick_label = ttk.Label(controls_frame, text="Tick: 0", font=("Arial", 12, "bold"))
         self.tick_label.pack(side=tk.LEFT)
+        
+        # Active Conversations frame
+        conversations_frame = ttk.LabelFrame(parent, text="Active Conversations", padding=10)
+        conversations_frame.pack(fill=tk.X, pady=(0, 10))
+        
+        # Conversations display area
+        self.conversations_text = scrolledtext.ScrolledText(
+            conversations_frame, 
+            wrap=tk.WORD, 
+            height=6,
+            font=("Arial", 9),
+            bg="#f8f8f8"
+        )
+        self.conversations_text.pack(fill=tk.X)
         
         # NPCs frame
         npcs_frame = ttk.LabelFrame(parent, text="NPCs", padding=10)
@@ -288,6 +302,31 @@ ID: {person.id}
         getattr(self, f"gossip_label_{person.id}").pack(anchor=tk.W)
         getattr(self, f"convo_label_{person.id}").pack(anchor=tk.W)
         
+        # Relationships frame
+        relationships_frame = ttk.LabelFrame(info_frame, text="Relationships with Other NPCs", padding=10)
+        relationships_frame.pack(fill=tk.X, pady=(0, 10))
+        
+        # Create relationship labels for each other NPC
+        setattr(self, f"relationships_frame_{person.id}", relationships_frame)
+        relationships_labels = {}
+        for other_person in self.sim.people.values():
+            if other_person.id != person.id:  # Don't show relationship with self
+                # Create frame for this relationship
+                rel_frame = ttk.Frame(relationships_frame)
+                rel_frame.pack(fill=tk.X, pady=2)
+                
+                # Name label
+                name_label = ttk.Label(rel_frame, text=f"{other_person.name}:", font=("Arial", 9, "bold"))
+                name_label.pack(side=tk.LEFT)
+                
+                # Trust and animosity labels
+                trust_label = ttk.Label(rel_frame, font=("Arial", 9))
+                trust_label.pack(side=tk.LEFT, padx=(5, 0))
+                
+                relationships_labels[other_person.id] = trust_label
+        
+        setattr(self, f"relationships_labels_{person.id}", relationships_labels)
+        
         # Rumors frame
         rumors_frame = ttk.LabelFrame(info_frame, text="Known Rumors", padding=10)
         rumors_frame.pack(fill=tk.BOTH, expand=True)
@@ -338,8 +377,22 @@ ID: {person.id}
             else:
                 rumors_widget.insert(tk.END, "No rumors known yet...")
         
+            # Update relationships with other NPCs
+            relationships_labels = getattr(self, f"relationships_labels_{person.id}")
+            for other_person_id, trust_label in relationships_labels.items():
+                other_person = self.sim.people[other_person_id]
+                relationship = self.sim.get_relationship(person, other_person)
+                
+                # Format: Trust: 750/1000, Animosity: 200/1000
+                trust_label.config(
+                    text=f"Trust: {relationship.trust}/1000, Animosity: {relationship.animosity}/1000"
+                )
+        
         # Update player relationships
         self.update_relationship_display()
+        
+        # Update conversations display
+        self.update_conversations_display()
     
     def update_relationship_display(self):
         """Update the player relationship display"""
@@ -362,6 +415,51 @@ ID: {person.id}
             # Color coding for NPC anger
             anger_color = "red" if person.anger > 600 else "orange" if person.anger > 300 else "green"
             widgets['anger'].config(text=f"{person.anger}/1000", foreground=anger_color)
+    
+    def update_conversations_display(self):
+        """Update the active conversations display"""
+        self.conversations_text.delete(1.0, tk.END)
+        
+        if not self.sim.conversations:
+            self.conversations_text.insert(tk.END, "No active conversations\n")
+            return
+        print(len(self.sim.conversations.items()))
+        for i, (conv_id, conversation) in enumerate(self.sim.conversations.items(), 1):
+            print(f"{i}: {conv_id}")
+            # Show conversation participants
+            participant_names = [p.name for p in conversation.participants]
+            if len(participant_names) == 2:
+                conv_header = f"{i}. {' and '.join(participant_names)} are talking"
+            else:
+                conv_header = f"{i}. {', '.join(participant_names[:-1])} and {participant_names[-1]} are talking"
+            
+            self.conversations_text.insert(tk.END, f"🗣️ {conv_header}\n")
+            
+            # Show conversation details
+            self.conversations_text.insert(tk.END, f"   Duration: {conversation.tick_count} ticks\n")
+            
+            # Show if rumors might be spreading
+            has_rumors = any(len(p.rumors) > 0 for p in conversation.participants)
+            if has_rumors:
+                self.conversations_text.insert(tk.END, "   💭 Topics: Sharing rumors and gossip\n")
+            else:
+                self.conversations_text.insert(tk.END, "   💭 Topics: General conversation\n")
+            
+            # Show average trust level in the conversation
+            total_trust = 0
+            relationship_count = 0
+            for j, p1 in enumerate(conversation.participants):
+                for p2 in conversation.participants[j+1:]:
+                    rel = self.sim.get_relationship(p1, p2)
+                    total_trust += rel.trust
+                    relationship_count += 1
+            
+            if relationship_count > 0:
+                avg_trust = total_trust / relationship_count
+                trust_level = "High" if avg_trust > 600 else "Medium" if avg_trust > 300 else "Low"
+                self.conversations_text.insert(tk.END, f"   🤝 Trust Level: {trust_level} ({int(avg_trust)}/1000)\n")
+            
+            self.conversations_text.insert(tk.END, "\n")
     
     def simulation_tick(self):
         """Execute one simulation tick"""

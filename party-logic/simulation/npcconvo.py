@@ -124,12 +124,16 @@ class NPCConvo:
                 person.gullibility / MAX_VAL *
                 relationship.trust / MAX_VAL *
                 rumor.plausibility / MAX_VAL)
+        print(f"believed chance: {believed_chance}")
         believed_it = random.random() < believed_chance
         return believed_it
 
     def spread_rumor(self, simulation: 'Simulation'):
+        print(RUMOR_SPREAD_CHANCE/MAX_VAL)
         if random.random() < RUMOR_SPREAD_CHANCE / MAX_VAL:
             spreader, rumor, score = self.choose_rumor_to_spread(simulation)
+            print(spreader)
+            print(rumor)
             if spreader and rumor:
                 for person in self.participants:
                     if person != spreader:
