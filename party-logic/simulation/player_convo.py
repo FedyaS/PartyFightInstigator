@@ -81,14 +81,18 @@ class PlayerConvo:
 
     def talk(self, player_text: str, simulation: 'Simulation'):
         relationships = simulation.get_all_relationships_for_person(self.npc)
-        prompt = construct_prompt(player_text, self.npc, relationships, self.npc.rumors, self.trust, self.animosity)
+        prompt = construct_prompt(player_text, self.npc, relationships, self.npc.rumors, self.trust, self.animosity,
+                                  self.conversation[-10:])
         response = get_llm_response(prompt)
+
+        self.conversation.append({"role": "user", "content": player_text})
 
         if not response:
             print("Failed LLM Call")
         elif response.out_of_scope:
             print("Out of Scope")
         else:
+            self.conversation.append({"role": "assistant", "content": response.npc_response_to_player})
             if response.trust_change:
                 self.change_trust(response.trust_change)
             if response.animosity_change:

@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List, Set
+from typing import TYPE_CHECKING, List, Set, Dict, Union
 
 if TYPE_CHECKING:
     from simulation.person import Person
@@ -24,7 +24,7 @@ def form_rumors_text(rumors: Set['Rumor']):
     return rumors_text
 
 def construct_prompt(player_text: str, npc: 'Person', npc_relationships: List['Relationship'], rumors: Set['Rumor'],
-                     trust: int, animosity: int):
+                     trust: int, animosity: int, prior_texts: List[Dict[str, Union[str]]]):
 
     relationships_text = form_relationships_text(npc, npc_relationships)
     rumors_text = form_rumors_text(rumors)
@@ -118,5 +118,6 @@ Remember: Your response should sound natural and human-like, reflecting {npc.nam
 
     return [
         {"role": "system", "content": system_prompt.strip()},
+        *prior_texts,  # Insert all conversation history
         {"role": "user", "content": player_text}
     ]
