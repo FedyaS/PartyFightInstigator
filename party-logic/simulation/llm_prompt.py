@@ -46,15 +46,14 @@ def construct_prompt(player_text: str, npc: 'Person', npc_relationships: List['R
     Your animosity towards them is: {animosity} out of 1000.
     Your relationships with other NPCs are as follows: {relationships_text}
     You know about the following rumors: {rumors_text}
-    
+
     Based on what the player said, the tone in which they said it, your current trust and animosity,
     your relationships with other NPCs, and your personality and gullibility, decide how:
     1. your personal anger level changes (min:-1000,max:1000)- anger_change
     2. how the trust between you and the player changes (min:-1000,max:1000)- trust_change
     3. how the animosity between you and the player changes (min:-1000,max:1000)- animosity_change
-    
-    To respond to this prompt, you must first gauge the player's intent.
-    They intent may be:
+
+    Gauge the player's intent and select exactly one of the following intents:
     1. ChatIntent - exchange and share information. In this case you may make small talk.
     You are allowed to discuss anything and anyone.
     2. LearnIntent - The player is attempting to learn a rumor or learn about how you view other NPCs.
@@ -73,7 +72,8 @@ def construct_prompt(player_text: str, npc: 'Person', npc_relationships: List['R
     the rumor is about). The plausibility of the rumor (min:0,max:1000)- how likely the rumor is to be true.
     The harmfulness of the rumor (min:0,max:1000) - how mean is the rumor?
     id_existing_rumor - If this rumor already matches a rumor which you know.
-    
+
+    Exactly one intent must be present in the response. Set all other intents to null.
     Generate a response that is concise, in character, and try to make it funny and human-sounding.
     Respond in the style of {npc.name} in npc_response_to_player field.
     """

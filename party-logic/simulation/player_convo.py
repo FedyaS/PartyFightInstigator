@@ -89,26 +89,25 @@ class PlayerConvo:
             print("Failed LLM Call")
         elif response.out_of_scope:
             print("Out of Scope")
-        elif response.intent:
-            if isinstance(response.intent, ChatIntent):
-                print("Chat Intent")
-                return response.npc_response_to_player
-            elif isinstance(response.intent, LearnIntent):
-                print("Learn Intent")
-                return response.npc_response_to_player
-            elif isinstance(response.intent, InfluenceIntent):
-                print("Influence Intent")
-                for influence in response.intent.influences:
-                    other_person = simulation.safe_get_person(influence.id)
-                    if other_person:
-                        rel: 'Relationship' = simulation.get_relationship(self.npc, other_person)
-                        rel.modify_trust(influence.trust_change)
-                        rel.modify_animosity(influence.animosity_change)
-                return response.npc_response_to_player
-            elif isinstance(response.intent, GoTalkToIntent):
-                print("Go Talk To Intent")
-                return response.npc_response_to_player
-            elif isinstance(response.intent, NewRumorIntent):
-                print("New Rumor Intent")
-                self.hear_new_rumor(response.intent, simulation)
-                return response.npc_response_to_player
+        elif response.chat_intent:
+            print("Chat Intent")
+            return response.npc_response_to_player
+        elif response.learn_intent:
+            print("Learn Intent")
+            return response.npc_response_to_player
+        elif response.influence_intent:
+            print("Influence Intent")
+            for influence in response.influence_intent.influences:
+                other_person = simulation.safe_get_person(influence.id)
+                if other_person:
+                    rel: 'Relationship' = simulation.get_relationship(self.npc, other_person)
+                    rel.modify_trust(influence.trust_change)
+                    rel.modify_animosity(influence.animosity_change)
+            return response.npc_response_to_player
+        elif response.go_talk_to_intent:
+            print("Go Talk To Intent")
+            return response.npc_response_to_player
+        elif response.new_rumor_intent:
+            print("New Rumor Intent")
+            self.hear_new_rumor(response.new_rumor_intent, simulation)
+            return response.npc_response_to_player

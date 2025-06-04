@@ -81,6 +81,7 @@ def get_llm_response(prompt, model_name: str = DEFAULT_MODEL) -> Optional[LLMRes
         'text_format': LLMResponse # Pass the class directly as per user's preference
     }
     
+    print(request_payload)
     start_time = time.time()
     try:
         response = client.responses.parse(**request_payload)
