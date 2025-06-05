@@ -18,7 +18,8 @@ load_dotenv()
 client = OpenAI()
 
 LLM_LOG_FILE = "llm_calls.jsonl"
-DEFAULT_MODEL = "gpt-4.1-nano-2025-04-14"
+# DEFAULT_MODEL = "gpt-4.1-nano-2025-04-14"
+DEFAULT_MODEL = "gpt-4.1-mini-2025-04-14"
 
 
 # --- LLM Call Logging ---
@@ -81,7 +82,7 @@ def get_llm_response(prompt, model_name: str = DEFAULT_MODEL) -> Optional[LLMRes
         'text_format': LLMResponse # Pass the class directly as per user's preference
     }
     
-    print(request_payload)
+    # print(request_payload)
     start_time = time.time()
     try:
         response = client.responses.parse(**request_payload)
@@ -89,7 +90,7 @@ def get_llm_response(prompt, model_name: str = DEFAULT_MODEL) -> Optional[LLMRes
         end_time = time.time()
         response_time_ms = int((end_time - start_time) * 1000)
 
-        print(response)
+        # print(response)
         try:
             with open('resp.txt', 'w', encoding='utf-8') as f:
                 f.write(str(response))
@@ -97,6 +98,12 @@ def get_llm_response(prompt, model_name: str = DEFAULT_MODEL) -> Optional[LLMRes
             print("Failed to write response to file")
 
         parsed_response = response.output_parsed
+        try:
+            print(f"anger: {parsed_response.anger_change} - trust: {parsed_response.trust_change} - animosity: {parsed_response.animosity_change}")
+            if (parsed_response.new_rumor_intent):
+                print(parsed_response.new_rumor_intent)
+        except Exception as e:
+            print(parsed_response)
         log_llm_call(
             model_name=model_name,
             input_tokens=response.usage.input_tokens,

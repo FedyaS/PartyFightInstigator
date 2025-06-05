@@ -423,9 +423,7 @@ ID: {person.id}
         if not self.sim.conversations:
             self.conversations_text.insert(tk.END, "No active conversations\n")
             return
-        print(len(self.sim.conversations.items()))
         for i, (conv_id, conversation) in enumerate(self.sim.conversations.items(), 1):
-            print(f"{i}: {conv_id}")
             # Show conversation participants
             participant_names = [p.name for p in conversation.participants]
             if len(participant_names) == 2:

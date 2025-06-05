@@ -63,6 +63,7 @@ class PlayerConvo:
                 rel.modify_trust(-rumor.harmfulness / 2)
 
         elif believed_it:
+            print("Believed it")
             self.change_trust(TRUST_INCREASE_ON_RUMOR_BELIEF)
             self.npc.modify_anger(rumor.harmfulness * ANGER_INCREASE_PER_RUMOR_HARM)
 
@@ -77,6 +78,7 @@ class PlayerConvo:
                     rel.modify_trust(-rumor.harmfulness / 2)
 
         elif not believed_it:
+            print("Did not believe it")
             self.change_trust(-TRUST_DECREASE_ON_RUMOR_DISBELIEF)
 
     def talk(self, player_text: str, simulation: 'Simulation'):
@@ -97,6 +99,8 @@ class PlayerConvo:
                 self.change_trust(response.trust_change)
             if response.animosity_change:
                 self.change_animosity(response.animosity_change)
+            if response.anger_change:
+                self.npc.modify_anger(response.anger_change)
 
             if response.chat_intent:
                 print("Chat Intent")
