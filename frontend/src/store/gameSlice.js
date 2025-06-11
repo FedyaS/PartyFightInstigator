@@ -2,14 +2,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-	time_started: 0,
+	time_started: "2025-06-11T01:26:46Z",
 	seconds_passed: 0,
-	chaos_meter: 0,
-	personal_risk: 0,
-	goal: "",
-	level: "",
-	party_headcount: 0,
-	active_rumors: 0,
+	chaos_meter: 50,
+	personal_risk: 50,
+	goal: "Cause chaos",
+	level: "1",
+	party_headcount: 13,
+	active_rumors: 2,
 	status: "LOADING", // 'LOADING', 'PAUSED', 'LIVE', 'WON', 'LOST'
 	tick_count: 0,
 	notifications: [
