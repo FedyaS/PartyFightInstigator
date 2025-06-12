@@ -21,7 +21,7 @@ const initialState = {
 			name: "CEO",
 			relationship_score: 25,
 			anger: 57,
-			personality: "demanding",
+			personality: "ISTP",
 			gullibility: 30,
 			conversation_id: null,
 			playerConversation: {
@@ -32,11 +32,11 @@ const initialState = {
 			},
 		},
 		manager: {
-			id: "manager",
+			id: "elon",
 			name: "Manager",
 			relationship_score: 60,
 			anger: 20,
-			personality: "friendly",
+			personality: "ENTJ",
 			gullibility: 70,
 			conversation_id: null,
 			playerConversation: {
