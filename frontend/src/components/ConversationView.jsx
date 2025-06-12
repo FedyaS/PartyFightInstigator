@@ -75,7 +75,11 @@ function ConversationView({ activeNpcId }) {
 				<div className="left-section">
 					{/* Top: NPC Image and Message */}
 					<div className="npc-info-top">
-						<img src="/assets/ceo.png" alt="NPC" className="npc-image" />
+						<img
+							src={`/assets/${activeNpcId}.png`}
+							alt="NPC"
+							className="npc-image"
+						/>
 						<div
 							className={`speech-bubble npc-speech-bubble ${
 								npcMessage.isLoading ? "loading" : ""

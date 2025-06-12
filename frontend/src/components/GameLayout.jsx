@@ -23,7 +23,8 @@ function GameLayout({ children }) {
 				<aside className="graph-section">
 					<ViewSwitcher activeView={activeView} onViewChange={setActiveView} />
 					{/* {activeView === "MAP" ? <MapView /> : <AttendeesView />} MAP functionality commented out */}
-					<AttendeesView /> {/* Always show AttendeesView for now */}
+					<AttendeesView setActiveNpcId={setActiveNpcId} />{" "}
+					{/* Always show AttendeesView for now */}
 				</aside>
 			</div>
 		</div>

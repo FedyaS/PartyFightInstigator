@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import NPCCard from "./NPCCard";
 import "./AttendeesView.css";
 
-function AttendeesView() {
+function AttendeesView({ setActiveNpcId }) {
 	const npcs = useSelector((state) => state.game.npcs);
 	const npcArray = Object.values(npcs);
 
@@ -24,6 +24,13 @@ function AttendeesView() {
 		);
 	};
 
+	const handleNavigateToNPC = (npcId) => {
+		const npcIndex = npcArray.findIndex((npc) => npc.id === npcId);
+		if (npcIndex !== -1) {
+			setCurrentNPCIndex(npcIndex);
+		}
+	};
+
 	// Add keyboard navigation
 	useEffect(() => {
 		const handleKeyPress = (e) => {
@@ -40,7 +47,13 @@ function AttendeesView() {
 
 	return (
 		<div className="attendees-view">
-			<NPCCard npc={currentNPC} onNext={handleNext} onPrev={handlePrev} />
+			<NPCCard
+				npc={currentNPC}
+				onNext={handleNext}
+				onPrev={handlePrev}
+				setActiveNpcId={setActiveNpcId}
+				onNavigateToNPC={handleNavigateToNPC}
+			/>
 		</div>
 	);
 }

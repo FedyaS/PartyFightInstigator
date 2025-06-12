@@ -47,9 +47,9 @@ const initialState = {
 			},
 		},
 	},
-	npcConversations: [
-		// { id: string, participants: string[], memo: string }
-	],
+	npcConversations: {
+		// id: { id: string, participants: string[], memo: string }
+	},
 };
 
 const gameSlice = createSlice({
