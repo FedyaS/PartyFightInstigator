@@ -1,23 +1,34 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import {
+	sendPlayerMessage,
+	updatePlayerConversation,
+} from "../store/gameSlice";
 import "./ConversationView.css";
 import Dial from "./Dial.jsx";
 import EmotionBar from "./EmotionBar.jsx";
 import VoiceDotCone from "./VoiceDotCone.jsx";
 import PlayerNotes from "./PlayerNotes.jsx";
 
-function ConversationView() {
+function ConversationView({ activeNpcId }) {
 	const inputRef = useRef(null);
-	const [npcMessage, setNpcMessage] = useState({
-		text: "Hello! I am the CEO. Ask me anything.",
-		isLoading: false,
-	});
-	const [playerMessage, setPlayerMessage] = useState(null);
+	const dispatch = useDispatch();
+	const activeNpc = useSelector((state) => state.game.npcs[activeNpcId]);
+
 	const [playerInputText, setPlayerInputText] = useState("");
 	const [animationDirection, setAnimationDirection] = useState("none");
 	const [isPlayerInputLocked, setIsPlayerInputLocked] = useState(false);
-	const [angerLevel, setAngerLevel] = useState(57);
-	const [trustLevel, setTrustLevel] = useState(25);
+
+	// Derived values from Redux:
+	const npcMessage = {
+		text: activeNpc?.playerConversation.last_npc_message || "",
+		isLoading: activeNpc?.playerConversation.NPC_is_thinking || false,
+	};
+	const playerMessage = activeNpc?.playerConversation.last_player_message
+		? { text: activeNpc.playerConversation.last_player_message }
+		: null;
+	const angerLevel = activeNpc?.anger || 0;
+	const trustLevel = activeNpc?.relationship_score || 0;
 
 	useEffect(() => {
 		if (!isPlayerInputLocked) {
@@ -31,22 +42,29 @@ function ConversationView() {
 	const handleSendMessage = () => {
 		if (playerInputText.trim() === "" || isPlayerInputLocked) return;
 
-		const newPlayerMessage = { sender: "player", text: playerInputText };
-		setPlayerMessage(newPlayerMessage);
 		setPlayerInputText("");
 		setIsPlayerInputLocked(true);
 		setAnimationDirection("up");
 
-		setNpcMessage((prev) => ({ ...prev, isLoading: true }));
+		dispatch(
+			sendPlayerMessage({
+				npcId: activeNpcId,
+				message: playerInputText,
+			})
+		);
+
+		// Mock response (replace with real backend call later)
 		setTimeout(() => {
-			setNpcMessage({
-				text: `I received your message: "${newPlayerMessage.text}". That's interesting!`,
-				isLoading: false,
-			});
+			dispatch(
+				updatePlayerConversation({
+					npcId: activeNpcId,
+					last_npc_message: `I received: "${playerInputText}". Interesting!`,
+					last_message_is: "NPC",
+					NPC_is_thinking: false,
+				})
+			);
 			setIsPlayerInputLocked(false);
 			setAnimationDirection("down");
-			setAngerLevel((prev) => Math.min(100, prev + 10));
-			setTrustLevel((prev) => Math.max(0, prev - 5));
 		}, 2000);
 	};
 

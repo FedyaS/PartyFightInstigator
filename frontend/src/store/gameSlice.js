@@ -15,23 +15,38 @@ const initialState = {
 	notifications: [
 		// { id: string, text: string, urgency: 'LOW' | 'MEDIUM' | 'HIGH' }
 	],
-	npcs: [
-		// {
-		//   id: string,
-		//   name: string,
-		//   relationship_score: number,
-		//   anger: number,
-		//   personality: string,
-		//   gullibility: number,
-		//   conversation_id: string | null,
-		//   playerConversation: {
-		//     last_npc_message: string,
-		//     last_player_message: string,
-		//     last_message_is: 'NPC' | 'PLAYER',
-		//     NPC_is_thinking: boolean
-		//   }
-		// }
-	],
+	npcs: {
+		ceo: {
+			id: "ceo",
+			name: "CEO",
+			relationship_score: 25,
+			anger: 57,
+			personality: "demanding",
+			gullibility: 30,
+			conversation_id: null,
+			playerConversation: {
+				last_npc_message: "Hello! I am the CEO. Ask me anything.",
+				last_player_message: null,
+				last_message_is: "NPC",
+				NPC_is_thinking: false,
+			},
+		},
+		manager: {
+			id: "manager",
+			name: "Manager",
+			relationship_score: 60,
+			anger: 20,
+			personality: "friendly",
+			gullibility: 70,
+			conversation_id: null,
+			playerConversation: {
+				last_npc_message: "Hey there! How's the party going?",
+				last_player_message: null,
+				last_message_is: "NPC",
+				NPC_is_thinking: false,
+			},
+		},
+	},
 	npcConversations: [
 		// { id: string, participants: string[], memo: string }
 	],
@@ -77,7 +92,7 @@ const gameSlice = createSlice({
 		// Frontend-driven: Update player message and set NPC thinking
 		sendPlayerMessage: (state, action) => {
 			const { npcId, message } = action.payload;
-			const npc = state.npcs.find((npc) => npc.id === npcId);
+			const npc = state.npcs[npcId];
 			if (npc) {
 				npc.playerConversation.last_player_message = message;
 				npc.playerConversation.last_message_is = "PLAYER";
@@ -88,7 +103,7 @@ const gameSlice = createSlice({
 		updatePlayerConversation: (state, action) => {
 			const { npcId, last_npc_message, last_message_is, NPC_is_thinking } =
 				action.payload;
-			const npc = state.npcs.find((npc) => npc.id === npcId);
+			const npc = state.npcs[npcId];
 			if (npc) {
 				npc.playerConversation.last_npc_message =
 					last_npc_message ?? npc.playerConversation.last_npc_message;
